@@ -8,7 +8,7 @@ orig_shape = (1,32,32,3)
 target_shape = (1,64,64,3)
 
 def save_X(X_train, X_test):
-    sys.stdout.write('Saving X_data\n')
+    sys.stdout.write('Saving X_data\n\n')
     sys.stdout.flush()
 
     if ~Path('./data/X_train_64.npy').is_file():
@@ -18,7 +18,7 @@ def save_X(X_train, X_test):
         np.save('./data/X_test_64.npy', X_test)
 
 def save_y(y_train, y_test):
-    sys.stdout.write('Saving y_data\n')
+    sys.stdout.write('Saving y_data\n\n')
     sys.stdout.flush()
 
     if ~Path('./data/y_train_64.npy').is_file():
@@ -84,7 +84,7 @@ def get_transformed_imgs():
 
         imgs = np.load('./data/X_64.npy')
 
-        sys.stdout.write('Previously at {}%\n'.format(int(len(imgs)/600)))
+        sys.stdout.write('Previously at {}%\n\n'.format(int(len(imgs)/600)))
         sys.stdout.flush()
 
         for i in range(len(imgs)):
@@ -93,11 +93,11 @@ def get_transformed_imgs():
     return transformed_imgs
 
 def main():
-    sys.stdout.write('Welcome to img transformer\n')
+    sys.stdout.write('Welcome to image transformer\n\n')
     sys.stdout.write('We shall transform our 32x32 imgs into 64x64\n')
     sys.stdout.write('As dataset is really large, we segment this whole process into parts\n')
     sys.stdout.write('Do note that we save our data every 10%\n')
-    sys.stdout.write('Feel free to pause and run this program in your free time!\n')
+    sys.stdout.write('Feel free to pause and run this program in your free time!\n\n')
     sys.stdout.flush()
 
     transformed_imgs = get_transformed_imgs()
@@ -110,7 +110,10 @@ def main():
         transformed_img = image_transform(orig_imgs[i])
         transformed_imgs.append(transformed_img)
 
-        if ((i + nb_transformed) % 6000 == 0) and (i + nb_transformed != 0) and (i+nb_transformed != 60000):
+        if i+nb_transformed == 60000:
+            to_save = np.array(transformed_imgs)
+            np.save('./data/X_64.npy', to_save)
+        elif ((i + nb_transformed) % 6000 == 0) and (i + nb_transformed != 0):
             sys.stdout.write(str((i + nb_transformed) / 600) + '%\n')
             sys.stdout.flush()
             sys.stdout.write('\b\b\b\b\b\b')
@@ -125,7 +128,7 @@ def main():
     transformed_imgs = np.array(transformed_imgs)
 
     X_train = transformed_imgs[:50000]
-    X_test = transformed_imgs[:50000]
+    X_test = transformed_imgs[50000:]
 
     save_X(X_train, X_test)
 

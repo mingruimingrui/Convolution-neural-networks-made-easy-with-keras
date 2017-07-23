@@ -28,7 +28,7 @@ def check_pre_req():
         raise SystemExit
 
 def get_preprocessed_dataset():
-    sys.stdout.write('Loading Dataset\n')
+    sys.stdout.write('Loading Dataset\n\n')
     sys.stdout.flush()
 
     X_train = np.load('./data/X_train_64_preprocessed.npy')
@@ -49,7 +49,7 @@ def compile_model(model):
 def generate_model():
     # check if model exists if exists then load model from saved state
     if Path('./models/convnet_model_64.json').is_file():
-        sys.stdout.write('Loading existing model\n')
+        sys.stdout.write('Loading existing model\n\n')
         sys.stdout.flush()
 
         with open('./models/convnet_model_64.json') as file:
@@ -64,7 +64,7 @@ def generate_model():
 
         return model
 
-    sys.stdout.write('Loading new model\n')
+    sys.stdout.write('Loading new model\n\n')
     sys.stdout.flush()
 
     model = Sequential()
@@ -166,7 +166,7 @@ def get_accuracy(pred, real):
     return np.sum(result) / len(result)
 
 def main():
-    sys.stdout.write('Welcome to the improved attempt!\n')
+    sys.stdout.write('Welcome to the improved attempt!\n\n')
     sys.stdout.flush()
     check_pre_req()
     X_train, y_train, X_test, y_test = get_preprocessed_dataset()

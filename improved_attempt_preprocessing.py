@@ -22,7 +22,7 @@ def check_pre_req():
 def get_preprocessed_dataset():
     X_train, y_train, X_test, y_test = get_dataset()
 
-    sys.stdout.write('Preprocessing Dataset\n')
+    sys.stdout.write('Preprocessing Dataset\n\n')
     sys.stdout.flush()
 
     X_train = X_train.astype('float32') / dtype_mult
@@ -65,7 +65,7 @@ def preprocess_X_test():
         del X_test
 
 def preprocess_y_test():
-    sys.stdout.write('Preprocessing y test\n')
+    sys.stdout.write('Preprocessing y test\n\n')
     sys.stdout.flush()
 
     if Path('./data/y_test_64_preprocessed.npy').is_file() == False:

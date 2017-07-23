@@ -17,7 +17,7 @@ layer_depths = [2,4,8,10]
 labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 def get_dataset():
-    sys.stdout.write('Loading Dataset\n')
+    sys.stdout.write('Loading Dataset\n\n')
     sys.stdout.flush()
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -30,7 +30,7 @@ def get_dataset():
     return X_train, y_train, X_test, y_test
 
 def load_model():
-    sys.stdout.write('Loading model\n')
+    sys.stdout.write('Loading model\n\n')
     sys.stdout.flush()
 
     with open(model_path) as file:
@@ -52,7 +52,7 @@ def get_random_img(X):
     return X[np.random.randint(0, len(X))].reshape(X_shape)
 
 def generate_conv_layer_models():
-    sys.stdout.write('Generating layer models\n')
+    sys.stdout.write('Generating layer models\n\n')
     sys.stdout.flush()
     conv_models = []
 
