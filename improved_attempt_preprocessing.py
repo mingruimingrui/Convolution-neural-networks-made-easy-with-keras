@@ -8,10 +8,10 @@ num_classes = 10
 
 def check_pre_req():
     if (
-        Path('./data/X_train_126.npy').is_file() and
-        Path('./data/y_train_126.npy').is_file() and
-        Path('./data/X_test_126.npy').is_file() and
-        Path('./data/y_test_126.npy').is_file()
+        Path('./data/X_train_64.npy').is_file() and
+        Path('./data/y_train_64.npy').is_file() and
+        Path('./data/X_test_64.npy').is_file() and
+        Path('./data/y_test_64.npy').is_file()
     ) == False:
         print('Please complete the execution of encode_images.py first!')
         raise SystemExit
@@ -32,40 +32,40 @@ def get_preprocessed_dataset():
 def preprocess_X_train():
     print('Preprocessing X train')
 
-    if Path('./data/X_train_126_preprocessed.npy').is_file() == False:
-        X_train = np.load('./data/X_train_126.npy')
+    if Path('./data/X_train_64_preprocessed.npy').is_file() == False:
+        X_train = np.load('./data/X_train_64.npy')
         X_train = X_train.astype('float32') / dtype_mult
-        np.save('./data/X_train_126_preprocessed.npy', X_train)
+        np.save('./data/X_train_64_preprocessed.npy', X_train)
 
         del X_train
 
 def preprocess_y_train():
     print('Preprocessing y train')
 
-    if Path('./data/y_train_126_preprocessed.npy').is_file() == False:
-        y_train = np.load('./data/y_train_126.npy')
+    if Path('./data/y_train_64_preprocessed.npy').is_file() == False:
+        y_train = np.load('./data/y_train_64.npy')
         y_train = keras.utils.to_categorical(y_train, num_classes)
-        np.save('./data/y_train_126_preprocessed.npy', y_train)
+        np.save('./data/y_train_64_preprocessed.npy', y_train)
 
         del y_train
 
 def preprocess_X_test():
     print('Preprocessing X test')
 
-    if Path('./data/X_test_126_preprocessed.npy').is_file() == False:
-        X_test = np.load('./data/X_test_126.npy')
+    if Path('./data/X_test_64_preprocessed.npy').is_file() == False:
+        X_test = np.load('./data/X_test_64.npy')
         X_test = X_test.astype('float32') / dtype_mult
-        np.save('./data/X_test_126_preprocessed.npy', X_test)
+        np.save('./data/X_test_64_preprocessed.npy', X_test)
 
         del X_test
 
 def preprocess_y_test():
     print('Preprocessing y test')
 
-    if Path('./data/y_test_126_preprocessed.npy').is_file() == False:
-        y_test = np.load('./data/y_test_126.npy')
+    if Path('./data/y_test_64_preprocessed.npy').is_file() == False:
+        y_test = np.load('./data/y_test_64.npy')
         y_test = keras.utils.to_categorical(y_test, num_classes)
-        np.save('./data/y_test_126_preprocessed.npy', y_test)
+        np.save('./data/y_test_64_preprocessed.npy', y_test)
 
         del y_test
 

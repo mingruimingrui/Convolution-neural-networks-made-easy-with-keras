@@ -11,28 +11,28 @@ from keras.layers import Conv2D, MaxPooling2D
 # global static variables
 dtype_mult = 255.0 # unit8
 num_classes = 10
-X_shape = (-1, 126, 126, 3)
+X_shape = (-1, 64, 64, 3)
 epoch = 200
 batch_size = 128
 
 def check_pre_req():
     if (
-        Path('./data/X_train_126_preprocessed.npy').is_file() and
-        Path('./data/y_train_126_preprocessed.npy').is_file() and
-        Path('./data/X_test_126_preprocessed.npy').is_file() and
-        Path('./data/y_test_126_preprocessed.npy').is_file()
+        Path('./data/X_train_64_preprocessed.npy').is_file() and
+        Path('./data/y_train_64_preprocessed.npy').is_file() and
+        Path('./data/X_test_64_preprocessed.npy').is_file() and
+        Path('./data/y_test_64_preprocessed.npy').is_file()
     ) == False:
         print('Please complete the execution of encode_images.py first!')
         raise SystemExit
 
 def get_preprocessed_dataset():
     print('Loading Dataset')
-    
-    X_train = np.load('D:/Projects/CIFAR/data/X_train_126_preprocessed.npy')
-    y_train = np.load('D:/Projects/CIFAR/data/y_train_126_preprocessed.npy')
-    X_test = np.load('D:/Projects/CIFAR/data/X_test_126_preprocessed.npy')
-    y_test = np.load('D:/Projects/CIFAR/data/y_test_126_preprocessed.npy')
-    
+
+    X_train = np.load('D:/Projects/CIFAR/data/X_train_64_preprocessed.npy')
+    y_train = np.load('D:/Projects/CIFAR/data/y_train_64_preprocessed.npy')
+    X_test = np.load('D:/Projects/CIFAR/data/X_test_64_preprocessed.npy')
+    y_test = np.load('D:/Projects/CIFAR/data/y_test_64_preprocessed.npy')
+
     return X_train, y_train, X_test, y_test
 
 def generate_optimizer():
@@ -45,64 +45,64 @@ def compile_model(model):
 
 def generate_model():
     # check if model exists if exists then load model from saved state
-    if Path('./models/convnet_model_126.json').is_file():
+    if Path('./models/convnet_model_64.json').is_file():
         print('Loading existing model')
-        
-        with open('./models/convnet_model_126.json') as file:
+
+        with open('./models/convnet_model_64.json') as file:
             model = keras.models.model_from_json(json.load(file))
             file.close()
 
         # likewise for model weight, if exists load from saved state
-        if Path('./models/convnet_weights_126.h5').is_file():
-            model.load_weights('./models/convnet_weights_126.h5')
+        if Path('./models/convnet_weights_64.h5').is_file():
+            model.load_weights('./models/convnet_weights_64.h5')
 
         compile_model(model)
 
         return model
 
     print('Loading new model')
-    
+
     model = Sequential()
 
-    # Conv1 126 126 (128)
-    model.add(Conv2D(128, (7, 7), padding='same', input_shape=X_shape[1:]))
+    # Conv1 64 64 (64)
+    model.add(Conv2D(64, (5, 5), padding='same', input_shape=X_shape[1:]))
     model.add(Activation('relu'))
     model.add(Dropout(0.1))
-    model.add(Conv2D(128, (7, 7), padding='same'))
+    model.add(Conv2D(64, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.1))
     model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
 
-    # Conv2 63 63 (256)
-    model.add(Conv2D(256, (7, 7), padding='same'))
+    # Conv2 32 32 (128)
+    model.add(Conv2D(128, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.20))
-    model.add(Conv2D(256, (7, 7), padding='same'))
+    model.add(Conv2D(128, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.20))
     model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
 
-    # Conv3 32 32 (512)
-    model.add(Conv2D(512, (7, 7), padding='same'))
+    # Conv3 16 16 (256)
+    model.add(Conv2D(256, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.30))
-    model.add(Conv2D(512, (7, 7), padding='same'))
+    model.add(Conv2D(256, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.30))
     model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
 
-    # Conv4 16 16 (1024)
-    model.add(Conv2D(1024, (7, 7), padding='same'))
+    # Conv4  8 8 (512)
+    model.add(Conv2D(512, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.40))
-    model.add(Conv2D(1024, (7, 7), padding='same'))
+    model.add(Conv2D(512, (5, 5), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.40))
     model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
 
     # FC
     model.add(Flatten())
-    model.add(Dense(1024))
+    model.add(Dense(512))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     model.add(Dense(num_classes))
@@ -111,12 +111,12 @@ def generate_model():
     # compile has to be done impurely
     compile_model(model)
 
-    with open('./models/convnet_model_126.json', 'w') as outfile:
+    with open('./models/convnet_model_64.json', 'w') as outfile:
         json.dump(model.to_json(), outfile)
         outfile.close()
 
     return model
-    
+
 def image_generator():
     return ImageDataGenerator(
         featurewise_center=False,  # set input mean to 0 over the dataset
@@ -148,7 +148,7 @@ def train(model, X_train, y_train, X_test, y_test):
                             epochs=1,
                             validation_data=(X_test, y_test))
         print('Epoch {} done, saving model to file\n'.format(epoch_count))
-        model.save_weights('./models/convnet_weights_126.h5')
+        model.save_weights('./models/convnet_weights_64.h5')
 
     return model
 
@@ -156,7 +156,7 @@ def get_accuracy(pred, real):
     # reward algorithm
     result = pred.argmax(axis=1) == real.argmax(axis=1)
     return np.sum(result) / len(result)
-    
+
 def main():
     print('Welcome to the improved attempt!')
     check_pre_req()
@@ -167,5 +167,3 @@ def main():
 if __name__ == "__main__":
     # execute only if run as a script
     main()
-
-
