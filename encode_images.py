@@ -9,20 +9,20 @@ target_shape = (1,64,64,3)
 def save_X(X_train, X_test):
     print('Saving X')
 
-    if ~Path('./data/X_train_126.npy').is_file():
-        np.save('./data/X_train_126.npy', X_train)
+    if ~Path('./data/X_train_64.npy').is_file():
+        np.save('./data/X_train_64.npy', X_train)
 
-    if ~Path('./data/X_test_126.npy').is_file():
-        np.save('./data/X_test_126.npy', X_test)
+    if ~Path('./data/X_test_64.npy').is_file():
+        np.save('./data/X_test_64.npy', X_test)
 
 def save_y(y_train, y_test):
     print('Saving y')
 
-    if ~Path('./data/y_train_126.npy').is_file():
-        np.save('./data/y_train_126.npy', y_train)
+    if ~Path('./data/y_train_64.npy').is_file():
+        np.save('./data/y_train_64.npy', y_train)
 
-    if ~Path('./data/y_test_126.npy').is_file():
-        np.save('./data/y_test_126.npy', y_test)
+    if ~Path('./data/y_test_64.npy').is_file():
+        np.save('./data/y_test_64.npy', y_test)
 
 def get_dataset():
     print('Loading Dataset')
@@ -39,6 +39,8 @@ def get_formatted_dataset():
     del y_train, y_test
 
     print('Formatting data')
+    # this is probably something I should fix
+    # not all these data needs to be formatted
 
     orig_imgs=[]
     for i in range(len(X_train)):
@@ -73,10 +75,10 @@ def image_transform(orig_img):
 def get_transformed_imgs():
     transformed_imgs = []
 
-    if Path('./data/X_126.npy').is_file():
+    if Path('./data/X_64.npy').is_file():
         print('Loading transformed images, continuing job')
 
-        imgs = np.load('./data/X_126.npy')
+        imgs = np.load('./data/X_64.npy')
 
         for i in range(len(imgs)):
             transformed_imgs.append(imgs[i])
@@ -85,7 +87,7 @@ def get_transformed_imgs():
 
 def main():
     print('Welcome to img transformer')
-    print('We shall transform our 32x32 imgs into 126x126')
+    print('We shall transform our 32x32 imgs into 64x64')
     print('As dataset is really large, we segment this whole process into parts')
     print('Do note that we save our data every 10%')
     print('Feel free to pause and run this program in your free time!')
@@ -101,9 +103,9 @@ def main():
         transformed_imgs.append(transformed_img)
 
         if (i + nb_transformed) % 6000 == 0:
-            print(str((i + nb_transformed) / 6000) + '%')
+            print(str((i + nb_transformed) / 600) + '%')
             to_save = np.array(transformed_imgs)
-            np.save('./data/X_126.npy', to_save)
+            np.save('./data/X_64.npy', to_save)
 
     print('All images transformed')
 
