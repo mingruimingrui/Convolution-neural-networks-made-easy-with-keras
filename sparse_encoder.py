@@ -1,7 +1,6 @@
 def sparse_encode(sparse_img, C=5):
     import numpy as np
     import scipy as sp
-    import matplotlib.pyplot as plt
     import scipy.ndimage as spimg
     import scipy.fftpack as spfft
     import scipy.optimize as spopt
@@ -24,7 +23,7 @@ def sparse_encode(sparse_img, C=5):
             x2 = x.reshape(nx, ny)
             Ax = idct2(x2) * ri
             Axb = Ax - b
-            
+
             cost = np.sum(Axb ** 2)
             grad = (2 * dct2(Axb)).reshape(-1)
 
@@ -43,4 +42,3 @@ def sparse_encode(sparse_img, C=5):
         orig[:,:,i] = Xa.astype('uint8')
 
     return orig
-

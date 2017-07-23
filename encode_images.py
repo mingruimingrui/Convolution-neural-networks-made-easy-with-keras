@@ -1,6 +1,5 @@
 from pathlib import Path
 import numpy as np
-import matplotlib.pyplot as plt
 from keras.datasets import cifar10
 
 # gloabl variables
