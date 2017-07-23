@@ -1,3 +1,4 @@
+from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from keras.datasets import cifar10
@@ -6,66 +7,120 @@ from keras.datasets import cifar10
 orig_shape = (1,32,32,3)
 target_shape = (1,126,126,3)
 
-# we first gather the original dataset
-(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+def save_X(X_train, X_test):
+    if ~Path('./data/X_train_126.npy').is_file():
+        np.save('./data/X_train_126.npy', X_train)
 
-# then imgs are saved to an array for individual transformation
-# this process can be quickened by doing the transormation by batch
-# but that would take more computer memory, we are talking > 2GB of data
-# feel free to edit this code to suit your envoirnmental requirements!
-orig_imgs = []
-for i in range(len(X_train)):
-    orig_imgs.append(X_train[i])
-del X_train
-for i in range(len(X_test)):
-    orig_imgs.append(X_test[i])
-del X_test
+    if ~Path('./data/X_test_126.npy').is_file():
+        np.save('./data/X_test_126.npy', X_test)
 
-# this method will take a single 32x32 image and transform it into a 126x126 img
-# method used is simple gradient wise transformation
-def image_transform(img1):
-    img2 = np.zeros(target_shape[1:], dtype='uint8')
+def save_y(y_train, y_test):
+    if ~Path('./data/y_train_126.npy').is_file():
+        np.save('./data/y_train_126.npy', y_train)
+
+    if ~Path('./data/y_test_126.npy').is_file():
+        np.save('./data/y_test_126.npy', y_test)
+
+def get_dataset():
+    print('Loading Dataset')
+
+    (X_train, y_train), (X_test, y_test) = cifar10.load_data()
+
+    return X_train, y_train, X_test, y_test
+
+def get_formatted_dataset():
+    X_train, y_train, X_test, y_test = get_dataset()
+
+    save_y(y_train, y_test)
+
+    del y_train, y_test
+
+    print('Formatting data')
+
+    orig_imgs=[]
+    for i in range(len(X_train)):
+        orig_imgs.append(X_train[i])
+    for i in range(len(X_test)):
+        orig_imgs.append(X_test[i])
+    del X_train, X_test
+
+    return orig_imgs
+
+def image_transform(orig_img):
+    transformed_img = np.zeros(target_shape[1:], dtype='uint8')
     for i in range(target_shape[1] - 1):
         for j in range(target_shape[2] - 1):
             xm = i % 4 / 4
             ym = j % 4 / 4
             if xm == 0:
                 if ym == 0:
-                    img2[i,j,:] = img1[i//4, j//4, :].astype('uint8')
+                    transformed_img[i,j,:] = orig_img[i//4, j//4, :].astype('uint8')
                 else:
-                    img2[i,j,:] = (
-                        img1[i//4, j//4, :] * (1-ym) +
-                        img1[i//4, j//4+1, :] * ym
+                    transformed_img[i,j,:] = (
+                        orig_img[i//4, j//4, :] * (1-ym) +
+                        orig_img[i//4, j//4+1, :] * ym
                     ).astype('uint8')
             else:
                 if ym == 0:
-                    img2[i,j,:] = (
-                        img1[i//4, j//4, :] * (1-xm) +
-                        img1[i//4+1, j//4, :] * xm
+                    transformed_img[i,j,:] = (
+                        orig_img[i//4, j//4, :] * (1-xm) +
+                        orig_img[i//4+1, j//4, :] * xm
                     ).astype('uint8')
                 else:
-                    img2[i,j,:] = (
-                        img1[i//4, j//4, :] * (1-ym) * (1-xm) +
-                        img1[i//4, j//4+1, :] * ym * (1-xm) +
-                        img1[i//4+1, j//4, :] * (1-ym) * xm +
-                        img1[i//4+1, j//4+1, :] * ym * xm
+                    transformed_img[i,j,:] = (
+                        orig_img[i//4, j//4, :] * (1-ym) * (1-xm) +
+                        orig_img[i//4, j//4+1, :] * ym * (1-xm) +
+                        orig_img[i//4+1, j//4, :] * (1-ym) * xm +
+                        orig_img[i//4+1, j//4+1, :] * ym * xm
                     ).astype('uint8')
-    return img2
+    return transformed_img
 
-# transformed images are saved and a progress idicator is printed
-transformed_imgs = []
-for i in range(len(orig_imgs)):
-    transformed_imgs.append(image_transform(orig_imgs[i]))
-    if i % 600 == 0:
-        print(str(i/600) + '%')
+def get_transformed_imgs():
+    transformed_imgs = []
 
-transformed_imgs = np.array(transformed_imgs)
+    if Path('./data/X_126.npy').is_file():
+        print('Loading transformed images, continuing job')
 
-X_train = transformed_imgs[:50000]
-X_test = transformed_imgs[:50000]
+        imgs = np.load('./data/X_126.npy')
 
-# data is then stored into ./data
-np.save('./data/X_train_126.npy', X_train)
-np.save('./data/X_test_126.npy', X_test)
-np.save('./data/y_train_126.npy', y_train)
-np.save('./data/y_test_126.npy', y_test)
+        for i in range(len(imgs)):
+            transformed_imgs.append(imgs[i])
+
+    return transformed_imgs
+
+def main():
+    print('Welcome to img transformer')
+    print('We shall transform our 32x32 imgs into 126x126')
+    print('As dataset is really large, we segment this whole process into parts')
+    print('Do note that we save our data every 10%')
+    print('Feel free to pause and run this program in your free time!')
+
+    transformed_imgs = get_transformed_imgs
+
+    nb_transformed = len(transformed_imgs)
+
+    orig_imgs = get_formatted_dataset()
+    orig_imgs = orig_imgs[len(transformed_imgs):]
+    for i in range(len(orig_imgs)):
+        transformed_imgs = image_transform(orig_imgs[i])
+        transformed_imgs.append(transformed_img)
+
+        if (i + nb_transformed) % 6000 == 0:
+            print(str((i + nb_transformed) / 6000) + '%')
+            to_save = np.array(transformed_imgs)
+            np.save('./data/X_126.npy', to_save)
+
+    print('All images transformed')
+
+    del orig_imgs
+
+    transformed_imgs = np.array(transformed_imgs)
+
+    X_train = transformed_imgs[:50000]
+    X_test = transformed_imgs[:50000]
+
+    save_X(X_train, X_test)
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    main()
