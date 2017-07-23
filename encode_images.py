@@ -4,9 +4,11 @@ from keras.datasets import cifar10
 
 # gloabl variables
 orig_shape = (1,32,32,3)
-target_shape = (1,126,126,3)
+target_shape = (1,64,64,3)
 
 def save_X(X_train, X_test):
+    print('Saving X')
+
     if ~Path('./data/X_train_126.npy').is_file():
         np.save('./data/X_train_126.npy', X_train)
 
@@ -14,6 +16,8 @@ def save_X(X_train, X_test):
         np.save('./data/X_test_126.npy', X_test)
 
 def save_y(y_train, y_test):
+    print('Saving y')
+
     if ~Path('./data/y_train_126.npy').is_file():
         np.save('./data/y_train_126.npy', y_train)
 
@@ -46,32 +50,24 @@ def get_formatted_dataset():
     return orig_imgs
 
 def image_transform(orig_img):
-    transformed_img = np.zeros(target_shape[1:], dtype='uint8')
-    for i in range(target_shape[1] - 1):
-        for j in range(target_shape[2] - 1):
-            xm = i % 4 / 4
-            ym = j % 4 / 4
-            if xm == 0:
-                if ym == 0:
-                    transformed_img[i,j,:] = orig_img[i//4, j//4, :].astype('uint8')
-                else:
-                    transformed_img[i,j,:] = (
-                        orig_img[i//4, j//4, :] * (1-ym) +
-                        orig_img[i//4, j//4+1, :] * ym
-                    ).astype('uint8')
-            else:
-                if ym == 0:
-                    transformed_img[i,j,:] = (
-                        orig_img[i//4, j//4, :] * (1-xm) +
-                        orig_img[i//4+1, j//4, :] * xm
-                    ).astype('uint8')
-                else:
-                    transformed_img[i,j,:] = (
-                        orig_img[i//4, j//4, :] * (1-ym) * (1-xm) +
-                        orig_img[i//4, j//4+1, :] * ym * (1-xm) +
-                        orig_img[i//4+1, j//4, :] * (1-ym) * xm +
-                        orig_img[i//4+1, j//4+1, :] * ym * xm
-                    ).astype('uint8')
+    transformed_img = np.zeros(
+        (target_shape[1]+2,target_shape[2]+2,target_shape[3]),
+        dtype='uint8'
+    )
+    for i in range(orig_shape[1]):
+        for j in range(orig_shape[2]):
+            transformed_img[2*i+1,2*j+1,:] = orig_img[i,j,:]
+            transformed_img[2*i+1,2*j+2,:] = 0.5 * orig_img[i,j,:]
+            transformed_img[2*i+2,2*j+1,:] = 0.5 * orig_img[i,j,:]
+            transformed_img[2*i+1,2*j,:] = 0.5 * orig_img[i,j,:]
+            transformed_img[2*i,2*j+1,:] = 0.5 * orig_img[i,j,:]
+            transformed_img[2*i+2,2*j+2,:] = 0.25 * orig_img[i,j,:]
+            transformed_img[2*i,2*j+2,:] = 0.25 * orig_img[i,j,:]
+            transformed_img[2*i+2,2*j,:] = 0.25 * orig_img[i,j,:]
+            transformed_img[2*i,2*j,:] = 0.25 * orig_img[i,j,:]
+
+    transformed_img = transformed_img[1:target_shape[1]-1,1:target_shape[2]-1,:].astype('uint8')
+
     return transformed_img
 
 def get_transformed_imgs():
@@ -94,14 +90,14 @@ def main():
     print('Do note that we save our data every 10%')
     print('Feel free to pause and run this program in your free time!')
 
-    transformed_imgs = get_transformed_imgs
+    transformed_imgs = get_transformed_imgs()
 
     nb_transformed = len(transformed_imgs)
 
     orig_imgs = get_formatted_dataset()
     orig_imgs = orig_imgs[len(transformed_imgs):]
     for i in range(len(orig_imgs)):
-        transformed_imgs = image_transform(orig_imgs[i])
+        transformed_img = image_transform(orig_imgs[i])
         transformed_imgs.append(transformed_img)
 
         if (i + nb_transformed) % 6000 == 0:

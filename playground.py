@@ -17,21 +17,21 @@ batch_size = 128
 
 def get_dataset():
     print('Loading Dataset')
-    
+
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
-    
+
     return X_train, y_train, X_test, y_test
 
 def get_preprocessed_dataset():
     X_train, y_train, X_test, y_test = get_dataset()
-    
+
     print('Preprocessing Dataset')
-    
+
     X_train = X_train.astype('float32') / dtype_mult
     X_test = X_test.astype('float32') / dtype_mult
     y_train = keras.utils.to_categorical(y_train, num_classes)
     y_test = keras.utils.to_categorical(y_test, num_classes)
-    
+
     return X_train, y_train, X_test, y_test
 
 def generate_optimizer():
@@ -46,7 +46,7 @@ def generate_model():
     # check if model exists if exists then load model from saved state
     if Path('./models/convnet_model.json').is_file():
         print('Loading existing model')
-        
+
         with open('./models/convnet_model.json') as file:
             model = keras.models.model_from_json(json.load(file))
             file.close()
@@ -60,7 +60,7 @@ def generate_model():
         return model
 
     print('Loading new model')
-    
+
     model = Sequential()
 
     # Conv1 32 32 (32)
@@ -95,7 +95,7 @@ def generate_model():
         outfile.close()
 
     return model
-    
+
 def image_generator():
     return ImageDataGenerator(
         featurewise_center=False,  # set input mean to 0 over the dataset
@@ -135,15 +135,14 @@ def get_accuracy(pred, real):
     # reward algorithm
     result = pred.argmax(axis=1) == real.argmax(axis=1)
     return np.sum(result) / len(result)
-    
+
 def main():
     print('Welcome to CIFAR-10 Hello world of CONVNET!')
     X_train, y_train, X_test, y_test = get_preprocessed_dataset()
     model = generate_model()
     model = train(model, X_train, y_train, X_test, y_test)
-    
+
 
 if __name__ == "__main__":
     # execute only if run as a script
     main()
-
