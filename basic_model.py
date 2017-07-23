@@ -1,3 +1,4 @@
+import sys
 import json
 from pathlib import Path
 import numpy as np
@@ -16,7 +17,8 @@ epoch = 200
 batch_size = 128
 
 def get_dataset():
-    print('Loading Dataset')
+    sys.stdout.write('Loading Dataset\n')
+    sys.stdout.flush()
 
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -25,7 +27,8 @@ def get_dataset():
 def get_preprocessed_dataset():
     X_train, y_train, X_test, y_test = get_dataset()
 
-    print('Preprocessing Dataset')
+    sys.stdout.write('Preprocessing Dataset\n')
+    sys.stdout.flush()
 
     X_train = X_train.astype('float32') / dtype_mult
     X_test = X_test.astype('float32') / dtype_mult
@@ -45,7 +48,8 @@ def compile_model(model):
 def generate_model():
     # check if model exists if exists then load model from saved state
     if Path('./models/convnet_model.json').is_file():
-        print('Loading existing model')
+        sys.stdout.write('Loading existing model\n')
+        sys.stdout.flush()
 
         with open('./models/convnet_model.json') as file:
             model = keras.models.model_from_json(json.load(file))
@@ -59,7 +63,8 @@ def generate_model():
 
         return model
 
-    print('Loading new model')
+    sys.stdout.write('Loading new model\n')
+    sys.stdout.flush()
 
     model = Sequential()
 
@@ -111,7 +116,8 @@ def image_generator():
     )
 
 def train(model, X_train, y_train, X_test, y_test):
-    print('Training model with data augmentation\n')
+    sys.stdout.write('Training model with data augmentation\n\n')
+    sys.stdout.flush()
 
     datagen = image_generator()
     datagen.fit(X_train)
@@ -121,12 +127,14 @@ def train(model, X_train, y_train, X_test, y_test):
     epoch_count = 0
     while epoch_count < epoch:
         epoch_count += 1
-        print('Epoch count:', epoch_count)
+        sys.stdout.write('Epoch count: ' + str(epoch_count) + '\n')
+        sys.stdout.flush()
         model.fit_generator(datagen.flow(X_train, y_train, batch_size=batch_size),
                             steps_per_epoch=len(X_train) // batch_size,
                             epochs=1,
                             validation_data=(X_test, y_test))
-        print('Epoch {} done, saving model to file\n'.format(epoch_count))
+        sys.stdout.write('Epoch {} done, saving model to file\n\n'.format(epoch_count))
+        sys.stdout.flush()
         model.save_weights('./models/convnet_weights.h5')
 
     return model
@@ -137,7 +145,8 @@ def get_accuracy(pred, real):
     return np.sum(result) / len(result)
 
 def main():
-    print('Welcome to CIFAR-10 Hello world of CONVNET!')
+    sys.stdout.write('Welcome to CIFAR-10 Hello world of CONVNET!\n')
+    sys.stdout.flush()
     X_train, y_train, X_test, y_test = get_preprocessed_dataset()
     model = generate_model()
     model = train(model, X_train, y_train, X_test, y_test)

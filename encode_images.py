@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 import numpy as np
 from keras.datasets import cifar10
@@ -7,7 +8,8 @@ orig_shape = (1,32,32,3)
 target_shape = (1,64,64,3)
 
 def save_X(X_train, X_test):
-    print('Saving X')
+    sys.stdout.write('Saving X_data\n')
+    sys.stdout.flush()
 
     if ~Path('./data/X_train_64.npy').is_file():
         np.save('./data/X_train_64.npy', X_train)
@@ -16,7 +18,8 @@ def save_X(X_train, X_test):
         np.save('./data/X_test_64.npy', X_test)
 
 def save_y(y_train, y_test):
-    print('Saving y')
+    sys.stdout.write('Saving y_data\n')
+    sys.stdout.flush()
 
     if ~Path('./data/y_train_64.npy').is_file():
         np.save('./data/y_train_64.npy', y_train)
@@ -25,7 +28,8 @@ def save_y(y_train, y_test):
         np.save('./data/y_test_64.npy', y_test)
 
 def get_dataset():
-    print('Loading Dataset')
+    sys.stdout.write('Loading Dataset\n')
+    sys.stdout.flush()
 
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -38,7 +42,8 @@ def get_formatted_dataset():
 
     del y_train, y_test
 
-    print('Formatting data')
+    sys.stdout.write('Formatting data\n')
+    sys.stdout.flush()
     # this is probably something I should fix
     # not all these data needs to be formatted
 
@@ -53,22 +58,20 @@ def get_formatted_dataset():
 
 def image_transform(orig_img):
     transformed_img = np.zeros(
-        (target_shape[1]+2,target_shape[2]+2,target_shape[3]),
-        dtype='uint8'
-    )
+        (target_shape[1]+2,target_shape[2]+2,target_shape[3]))
     for i in range(orig_shape[1]):
         for j in range(orig_shape[2]):
-            transformed_img[2*i+1,2*j+1,:] = orig_img[i,j,:]
-            transformed_img[2*i+1,2*j+2,:] = 0.5 * orig_img[i,j,:]
-            transformed_img[2*i+2,2*j+1,:] = 0.5 * orig_img[i,j,:]
-            transformed_img[2*i+1,2*j,:] = 0.5 * orig_img[i,j,:]
-            transformed_img[2*i,2*j+1,:] = 0.5 * orig_img[i,j,:]
-            transformed_img[2*i+2,2*j+2,:] = 0.25 * orig_img[i,j,:]
-            transformed_img[2*i,2*j+2,:] = 0.25 * orig_img[i,j,:]
-            transformed_img[2*i+2,2*j,:] = 0.25 * orig_img[i,j,:]
-            transformed_img[2*i,2*j,:] = 0.25 * orig_img[i,j,:]
+            transformed_img[2*i+1,2*j+1,:] += orig_img[i,j,:]
+            transformed_img[2*i+1,2*j+2,:] += 0.5 * orig_img[i,j,:]
+            transformed_img[2*i+2,2*j+1,:] += 0.5 * orig_img[i,j,:]
+            transformed_img[2*i+1,2*j,:] += 0.5 * orig_img[i,j,:]
+            transformed_img[2*i,2*j+1,:] += 0.5 * orig_img[i,j,:]
+            transformed_img[2*i+2,2*j+2,:] += 0.25 * orig_img[i,j,:]
+            transformed_img[2*i,2*j+2,:] += 0.25 * orig_img[i,j,:]
+            transformed_img[2*i+2,2*j,:] += 0.25 * orig_img[i,j,:]
+            transformed_img[2*i,2*j,:] += 0.25 * orig_img[i,j,:]
 
-    transformed_img = transformed_img[1:target_shape[1]-1,1:target_shape[2]-1,:].astype('uint8')
+    transformed_img = transformed_img[1:target_shape[1]+1,1:target_shape[2]+1,:].astype('uint8')
 
     return transformed_img
 
@@ -76,9 +79,13 @@ def get_transformed_imgs():
     transformed_imgs = []
 
     if Path('./data/X_64.npy').is_file():
-        print('Loading transformed images, continuing job')
+        sys.stdout.write('Loading transformed images, continuing job\n')
+        sys.stdout.flush()
 
         imgs = np.load('./data/X_64.npy')
+
+        sys.stdout.write('Previously at {}%\n'.format(int(len(imgs)/600)))
+        sys.stdout.flush()
 
         for i in range(len(imgs)):
             transformed_imgs.append(imgs[i])
@@ -86,11 +93,12 @@ def get_transformed_imgs():
     return transformed_imgs
 
 def main():
-    print('Welcome to img transformer')
-    print('We shall transform our 32x32 imgs into 64x64')
-    print('As dataset is really large, we segment this whole process into parts')
-    print('Do note that we save our data every 10%')
-    print('Feel free to pause and run this program in your free time!')
+    sys.stdout.write('Welcome to img transformer\n')
+    sys.stdout.write('We shall transform our 32x32 imgs into 64x64\n')
+    sys.stdout.write('As dataset is really large, we segment this whole process into parts\n')
+    sys.stdout.write('Do note that we save our data every 10%\n')
+    sys.stdout.write('Feel free to pause and run this program in your free time!\n')
+    sys.stdout.flush()
 
     transformed_imgs = get_transformed_imgs()
 
@@ -102,12 +110,15 @@ def main():
         transformed_img = image_transform(orig_imgs[i])
         transformed_imgs.append(transformed_img)
 
-        if (i + nb_transformed) % 6000 == 0:
-            print(str((i + nb_transformed) / 600) + '%')
+        if ((i + nb_transformed) % 6000 == 0) and (i + nb_transformed != 0) and (i+nb_transformed != 60000):
+            sys.stdout.write(str((i + nb_transformed) / 600) + '%\n')
+            sys.stdout.flush()
+            sys.stdout.write('\b\b\b\b\b\b')
             to_save = np.array(transformed_imgs)
             np.save('./data/X_64.npy', to_save)
 
-    print('All images transformed')
+    sys.stdout.write('All images transformed\n')
+    sys.stdout.flush()
 
     del orig_imgs
 

@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import keras
 from pathlib import Path
@@ -13,14 +14,16 @@ def check_pre_req():
         Path('./data/X_test_64.npy').is_file() and
         Path('./data/y_test_64.npy').is_file()
     ) == False:
-        print('Please complete the execution of encode_images.py first!')
+        sys.stdout.write('Please complete the execution of encode_images.py first!\n')
+        sys.stdout.flush()
         raise SystemExit
 
 
 def get_preprocessed_dataset():
     X_train, y_train, X_test, y_test = get_dataset()
 
-    print('Preprocessing Dataset')
+    sys.stdout.write('Preprocessing Dataset\n')
+    sys.stdout.flush()
 
     X_train = X_train.astype('float32') / dtype_mult
     X_test = X_test.astype('float32') / dtype_mult
@@ -30,7 +33,7 @@ def get_preprocessed_dataset():
     return X_train, y_train, X_test, y_test
 
 def preprocess_X_train():
-    print('Preprocessing X train')
+    sys.stdout.write('Preprocessing X train\n')
 
     if Path('./data/X_train_64_preprocessed.npy').is_file() == False:
         X_train = np.load('./data/X_train_64.npy')
@@ -40,7 +43,8 @@ def preprocess_X_train():
         del X_train
 
 def preprocess_y_train():
-    print('Preprocessing y train')
+    sys.stdout.write('Preprocessing y train\n')
+    sys.stdout.flush()
 
     if Path('./data/y_train_64_preprocessed.npy').is_file() == False:
         y_train = np.load('./data/y_train_64.npy')
@@ -50,7 +54,8 @@ def preprocess_y_train():
         del y_train
 
 def preprocess_X_test():
-    print('Preprocessing X test')
+    sys.stdout.write('Preprocessing X test\n')
+    sys.stdout.flush()
 
     if Path('./data/X_test_64_preprocessed.npy').is_file() == False:
         X_test = np.load('./data/X_test_64.npy')
@@ -60,7 +65,8 @@ def preprocess_X_test():
         del X_test
 
 def preprocess_y_test():
-    print('Preprocessing y test')
+    sys.stdout.write('Preprocessing y test\n')
+    sys.stdout.flush()
 
     if Path('./data/y_test_64_preprocessed.npy').is_file() == False:
         y_test = np.load('./data/y_test_64.npy')
@@ -75,7 +81,8 @@ def main():
     preprocess_y_train()
     preprocess_X_test()
     preprocess_y_test()
-    print('All preprocessing done')
+    sys.stdout.write('All preprocessing done\n')
+    sys.stdout.flush()
 
 if __name__ == "__main__":
     # execute only if run as a script

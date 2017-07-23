@@ -1,3 +1,4 @@
+import sys
 import json
 from pathlib import Path
 import math
@@ -16,7 +17,8 @@ layer_depths = [2,4,8,10]
 labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 def get_dataset():
-    print('Loading Dataset')
+    sys.stdout.write('Loading Dataset\n')
+    sys.stdout.flush()
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
     # we perform a series of normalization and binarizer on the dataset here
@@ -24,12 +26,13 @@ def get_dataset():
     X_test = X_test.astype('float32') / dtype_mult
     y_train = keras.utils.to_categorical(y_train, num_classes)
     y_test = keras.utils.to_categorical(y_test, num_classes)
-    
+
     return X_train, y_train, X_test, y_test
 
 def load_model():
-    print('Loading model')
-    
+    sys.stdout.write('Loading model\n')
+    sys.stdout.flush()
+
     with open(model_path) as file:
         model = keras.models.model_from_json(json.load(file))
         file.close()
@@ -41,17 +44,18 @@ def load_model():
 def remove_till_layer(model, layer):
     while len(model.layers) > layer:
         model.pop()
-        
+
     return model
 
 def get_random_img(X):
-    
+
     return X[np.random.randint(0, len(X))].reshape(X_shape)
 
 def generate_conv_layer_models():
-    print('Generating layer models')
+    sys.stdout.write('Generating layer models\n')
+    sys.stdout.flush()
     conv_models = []
-    
+
     for i in layer_depths:
         conv_models.append(remove_till_layer(load_model(), i))
 
@@ -74,12 +78,12 @@ def plot_hidden_layers(model, img):
 def visualize(X, conv_models, n_imgs=10):
     for i in range(n_imgs):
         img = get_random_img(X)
-        
+
         _ = plt.imshow(img.reshape(img.shape[1:]))
-        
+
         for model in conv_models:
             plot_hidden_layers(model, img)
-        
+
         plt.show()
 
 def main():
@@ -88,7 +92,3 @@ def main():
     visualize(X, conv_models)
 
 main()
-
-
-
-        

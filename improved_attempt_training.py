@@ -1,3 +1,4 @@
+import sys
 import json
 from pathlib import Path
 import numpy as np
@@ -22,16 +23,18 @@ def check_pre_req():
         Path('./data/X_test_64_preprocessed.npy').is_file() and
         Path('./data/y_test_64_preprocessed.npy').is_file()
     ) == False:
-        print('Please complete the execution of encode_images.py first!')
+        sys.stdout.write('Please complete the execution of encode_images.py first!\n')
+        sys.stdout.flush()
         raise SystemExit
 
 def get_preprocessed_dataset():
-    print('Loading Dataset')
+    sys.stdout.write('Loading Dataset\n')
+    sys.stdout.flush()
 
-    X_train = np.load('D:/Projects/CIFAR/data/X_train_64_preprocessed.npy')
-    y_train = np.load('D:/Projects/CIFAR/data/y_train_64_preprocessed.npy')
-    X_test = np.load('D:/Projects/CIFAR/data/X_test_64_preprocessed.npy')
-    y_test = np.load('D:/Projects/CIFAR/data/y_test_64_preprocessed.npy')
+    X_train = np.load('./data/X_train_64_preprocessed.npy')
+    y_train = np.load('./data/y_train_64_preprocessed.npy')
+    X_test = np.load('./data/X_test_64_preprocessed.npy')
+    y_test = np.load('./data/y_test_64_preprocessed.npy')
 
     return X_train, y_train, X_test, y_test
 
@@ -46,7 +49,8 @@ def compile_model(model):
 def generate_model():
     # check if model exists if exists then load model from saved state
     if Path('./models/convnet_model_64.json').is_file():
-        print('Loading existing model')
+        sys.stdout.write('Loading existing model\n')
+        sys.stdout.flush()
 
         with open('./models/convnet_model_64.json') as file:
             model = keras.models.model_from_json(json.load(file))
@@ -60,7 +64,8 @@ def generate_model():
 
         return model
 
-    print('Loading new model')
+    sys.stdout.write('Loading new model\n')
+    sys.stdout.flush()
 
     model = Sequential()
 
@@ -132,7 +137,8 @@ def image_generator():
     )
 
 def train(model, X_train, y_train, X_test, y_test):
-    print('Training model with data augmentation\n')
+    sys.stdout.write('Training model with data augmentation\n\n')
+    sys.stdout.flush()
 
     datagen = image_generator()
     datagen.fit(X_train)
@@ -142,12 +148,14 @@ def train(model, X_train, y_train, X_test, y_test):
     epoch_count = 0
     while epoch_count < epoch:
         epoch_count += 1
-        print('Epoch count:', epoch_count)
+        sys.stdout.write('Epoch count: ' + str(epoch_count) + '\n')
+        sys.stdout.flush()
         model.fit_generator(datagen.flow(X_train, y_train, batch_size=batch_size),
                             steps_per_epoch=len(X_train) // batch_size,
                             epochs=1,
                             validation_data=(X_test, y_test))
-        print('Epoch {} done, saving model to file\n'.format(epoch_count))
+        sys.stdout.write('Epoch {} done, saving model to file\n\n'.format(epoch_count))
+        sys.stdout.flush()
         model.save_weights('./models/convnet_weights_64.h5')
 
     return model
@@ -158,7 +166,8 @@ def get_accuracy(pred, real):
     return np.sum(result) / len(result)
 
 def main():
-    print('Welcome to the improved attempt!')
+    sys.stdout.write('Welcome to the improved attempt!\n')
+    sys.stdout.flush()
     check_pre_req()
     X_train, y_train, X_test, y_test = get_preprocessed_dataset()
     model = generate_model()
