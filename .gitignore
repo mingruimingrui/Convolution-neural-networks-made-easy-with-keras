@@ -1,0 +1,20 @@
+# basic_model.py
+./models/convnet_model.json
+./models/convnet_weights.h5
+
+# encode_images.py
+./data/X_126.npy
+./data/X_train_126.npy
+./data/y_train_126.npy
+./data/X_test_126.npy
+./data/y_test_126.npy
+
+# improved_attempt_preprocessing.py
+./data/X_train_126_preprocessed.npy
+./data/y_train_126_preprocessed.npy
+./data/X_test_126_preprocessed.npy
+./data/y_test_126_preprocessed.npy
+
+# improved_attempt_training.py
+./models/convnet_model_126.json
+./models/convnet_weights_126.h5
