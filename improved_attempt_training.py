@@ -15,25 +15,23 @@ X_shape = (-1, 126, 126, 3)
 epoch = 200
 batch_size = 128
 
-def get_dataset():
-    print('Loading Dataset')
-    
-    X_train = np.load('D:/Projects/CIFAR/data/X_train_126.npy')
-    y_train = np.load('D:/Projects/CIFAR/data/y_train_126.npy')
-    X_test = np.load('D:/Projects/CIFAR/data/X_test_126.npy')
-    y_test = np.load('D:/Projects/CIFAR/data/y_test_126.npy')
-    
-    return X_train, y_train, X_test, y_test
+def check_pre_req():
+    if (
+        Path('./data/X_train_126_preprocessed.npy').is_file() and
+        Path('./data/y_train_126_preprocessed.npy').is_file() and
+        Path('./data/X_test_126_preprocessed.npy').is_file() and
+        Path('./data/y_test_126_preprocessed.npy').is_file()
+    ) == False:
+        print('Please complete the execution of encode_images.py first!')
+        raise SystemExit
 
 def get_preprocessed_dataset():
-    X_train, y_train, X_test, y_test = get_dataset()
+    print('Loading Dataset')
     
-    print('Preprocessing Dataset')
-    
-    X_train = X_train.astype('float32') / dtype_mult
-    X_test = X_test.astype('float32') / dtype_mult
-    y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_test = keras.utils.to_categorical(y_test, num_classes)
+    X_train = np.load('D:/Projects/CIFAR/data/X_train_126_preprocessed.npy')
+    y_train = np.load('D:/Projects/CIFAR/data/y_train_126_preprocessed.npy')
+    X_test = np.load('D:/Projects/CIFAR/data/X_test_126_preprocessed.npy')
+    y_test = np.load('D:/Projects/CIFAR/data/y_test_126_preprocessed.npy')
     
     return X_train, y_train, X_test, y_test
 
@@ -160,11 +158,11 @@ def get_accuracy(pred, real):
     return np.sum(result) / len(result)
     
 def main():
-    print('Welcome to CIFAR-10 Hello world of CONVNET!')
+    print('Welcome to the improved attempt!')
+    check_pre_req()
     X_train, y_train, X_test, y_test = get_preprocessed_dataset()
     model = generate_model()
     model = train(model, X_train, y_train, X_test, y_test)
-    
 
 if __name__ == "__main__":
     # execute only if run as a script
