@@ -8,12 +8,12 @@ Image recognition is the task of taking an image and classifying it. For us huma
 
 When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings processes images but scientists today uses a technique called deep learning to simulate the effects of image recognition, albeit at a basic level when compared to what humans are capable of.
 
-In this guide we aim to give readers a general understanding of what a convolution neural network (CNN) is and how to easily make one using the [keras library](#https://keras.io/).
+In this guide we aim to give readers a general understanding of what a convolution neural network (CNN) is and how to easily make one using the [keras library](https://keras.io/).
 
 ## Before we get started
 Though not necessary, some recommended prerequisites to this guide are:
-- [python programming skills](#https://learnpythonthehardway.org/)
-- [basic understanding of machine learning concepts and intuition](#https://www.coursera.org/learn/machine-learning)
+- [python programming skills](https://learnpythonthehardway.org/)
+- [basic understanding of machine learning concepts and intuition](https://www.coursera.org/learn/machine-learning)
 
 The goal of this article is to allow anyone with coding abilities to create their own deep learning model for image identification.
 
