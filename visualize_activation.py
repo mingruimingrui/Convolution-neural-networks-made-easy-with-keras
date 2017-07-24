@@ -30,9 +30,6 @@ def get_dataset():
     return X_train, y_train, X_test, y_test
 
 def load_model():
-    sys.stdout.write('Loading model\n\n')
-    sys.stdout.flush()
-
     with open(model_path) as file:
         model = keras.models.model_from_json(json.load(file))
         file.close()
@@ -47,9 +44,17 @@ def remove_till_layer(model, layer):
 
     return model
 
-def get_random_img(X):
+def get_random_predicted_img(X, y, model):
+    found = False
 
-    return X[np.random.randint(0, len(X))].reshape(X_shape)
+    while found == False:
+        i = np.random.randint(0, len(X))
+        img = X[i].reshape(X_shape)
+        pred = model.predict(img)[0]
+        if pred.argmax() == y[i].argmax():
+            found = True
+
+    return img, labels[pred.argmax()]
 
 def generate_conv_layer_models():
     sys.stdout.write('Generating layer models\n\n')
@@ -61,11 +66,14 @@ def generate_conv_layer_models():
 
     return conv_models
 
-def plot_hidden_layers(model, img):
+def plot_hidden_layers(model, img, title=None):
     to_visual = model.predict(img)
     to_visual = to_visual.reshape(to_visual.shape[1:])
 
     _ = plt.figure()
+    # some how this isn't showing up
+    if title:
+        _ = plt.title(title)
     sub_plot_height = math.ceil(np.sqrt(to_visual.shape[2]))
     for i in range(to_visual.shape[2]):
         ax = plt.subplot(sub_plot_height, sub_plot_height, i+1)
@@ -75,20 +83,25 @@ def plot_hidden_layers(model, img):
         _ = ax.set_aspect('equal')
         _ = plt.imshow(to_visual[:, :, i])
 
-def visualize(X, conv_models, n_imgs=10):
+def visualize(X, y, n_imgs=3):
+    full_model = load_model()
+    conv_models = generate_conv_layer_models()
+
     for i in range(n_imgs):
-        img = get_random_img(X)
+        img, title = get_random_predicted_img(X, y, full_model)
 
         _ = plt.imshow(img.reshape(img.shape[1:]))
+        _ = plt.title(title)
 
+        index = 0
         for model in conv_models:
-            plot_hidden_layers(model, img)
+            index += 1
+            plot_hidden_layers(model, img, 'conv layer {}'.format(i))
 
         plt.show()
 
 def main():
     X, y, _, _ = get_dataset()
-    conv_models = generate_conv_layer_models()
-    visualize(X, conv_models)
+    visualize(X, y)
 
 main()
