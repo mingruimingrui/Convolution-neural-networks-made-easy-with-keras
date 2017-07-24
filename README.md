@@ -15,6 +15,8 @@ Though not necessary, some recommended prerequisites to this guide are:
 - [python programming skills](#https://learnpythonthehardway.org/)
 - [basic understanding of machine learning concepts and intuition](#https://www.coursera.org/learn/machine-learning)
 
+The goal of this article is to allow anyone with coding abilities to create their own deep learning model for image identification.
+
 ## Contents
 1. [Convolution neural networks, the game changer](#convolution-neural-networks-the-game-changer)
 2. [Keras, deep learning simplified](#keras-deep-learning-simplified)
