@@ -39,7 +39,7 @@ def get_preprocessed_dataset():
     return X_train, y_train, X_test, y_test
 
 def generate_optimizer():
-    return keras.optimizers.rmsprop(lr=1e-4, decay=1e-6)
+    return keras.optimizers.rmsprop(lr=1e-5, decay=1e-7)
 
 def compile_model(model):
     model.compile(loss='categorical_crossentropy',
@@ -73,7 +73,7 @@ def generate_model():
     model.add(Conv2D(64, (5, 5), padding='same', input_shape=X_shape[1:]))
     model.add(Activation('relu'))
     model.add(Dropout(0.1))
-    model.add(Conv2D(64, (5, 5), padding='same'))
+    model.add(Conv2D(64, (3, 3), padding='same'))
     model.add(Activation('relu'))
     model.add(Dropout(0.1))
     model.add(MaxPooling2D(pool_size=(2, 2), padding='same'))
@@ -98,7 +98,7 @@ def generate_model():
 
     # FC
     model.add(Flatten())
-    model.add(Dense(512))
+    model.add(Dense(1024))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     model.add(Dense(num_classes))
