@@ -38,7 +38,7 @@ def get_preprocessed_dataset():
     return X_train, y_train, X_test, y_test
 
 def generate_optimizer():
-    return keras.optimizers.rmsprop(lr=0.0001, decay=1e-6)
+    return keras.optimizers.Adam()
 
 def compile_model(model):
     model.compile(loss='categorical_crossentropy',
@@ -84,9 +84,20 @@ def generate_model():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
+    # Conv2 8 8 (128)
+    model.add(Conv2D(128, (3, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv2D(128, (3, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+
     # FC
     model.add(Flatten())
     model.add(Dense(512))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(256))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     model.add(Dense(num_classes))
@@ -109,8 +120,9 @@ def image_generator():
         samplewise_std_normalization=False,  # divide each input by its std
         zca_whitening=False,  # apply ZCA whitening
         rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
-        width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
-        height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
+        zoom_range=0.1, # randomly zoom in on images by (percentage)
+        width_shift_range=0.05,  # randomly shift images horizontally (fraction of total width)
+        height_shift_range=0.05,  # randomly shift images vertically (fraction of total height)
         horizontal_flip=True,  # randomly flip images
         vertical_flip=False
     )

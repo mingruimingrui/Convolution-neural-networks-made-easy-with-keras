@@ -6,9 +6,9 @@ Image recognition is the task of taking an image and labelling it. For us humans
 
 <p align="center"><img src="https://naushadsblog.files.wordpress.com/2014/01/pixel.gif", width="360"></p>
 
-When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings processes images but scientists today uses a technique called deep learning to simulate the effects of image recognition, albeit at a basic level when compared to what humans are capable of.
+When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings processes images but scientists today are able to simulate a process similar to what we humans are capable of, albeit at a much more basic level, and this technique is called deep learning.
 
-In this guide we aim to teach you to build one of the most widely used deep learning model called a convolution neural network (or CNN for short).
+There are many good resources out there that teaches you how to build your very own deep learning model but in this guide, we shall focus on one of the most revolutionary and now widely used one, called a convolution neural network (or CNN for short).
 
 ## Before we get started
 Though not necessary, some recommended prerequisites to this guide are:
@@ -35,6 +35,8 @@ The goal of this article is to allow anyone with coding abilities to create thei
   - videos
   - textbooks
   - mathematics
+
+
 
 ## Keras, deep learning simplified
 - Sequential model
