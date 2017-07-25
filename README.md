@@ -26,24 +26,18 @@ The goal of this article is to allow anyone with coding abilities to create thei
 
 ## Convolution neural networks, the game changer
 - brief history
-  - Alexnet
-  - Hubel and Wiesel
-- model explanation
-  - Convolution
-  - Detective deduction by machine
-- extra material
-  - videos
-  - textbooks
-  - mathematics
-
-- brief history
-In the summer of 2012 ImageNet hosted it's annual Large Scale Visual Recognition Challenge to pit some of the world's most intelligent groups against one another. Alexnet was a deep convolution neural network model submitted in this competition. A good model classification error rate is typically around 25-26%. The second placed model in the competition was able to achieve an impressive 26.172% rate of error. Alexnet scored 15.315%. An unprecedented margin that is over 10% better than the next best model and that was the moment that many people believed marked the beginning of a new age in the field of computer vision.
+In the summer of 2012 ImageNet hosted it's annual Large Scale Visual Recognition Challenge to pit some of the world's most intelligent groups against one another. Alexnet was a deep convolution neural network model submitted in this competition. A good model classification error rate is typically around 25-26%. The second placed model in the competition was able to achieve an impressive 26.2% rate of error. Alexnet scored 15.3%. An unprecedented margin that is over 10% better than the next best model. That was the moment that many people believed marked the beginning of a new age in the field of computer vision.
 
 The basis of computer vision and CNNs were laid down in the early 1950s by Hubel and Wiesel when they studied the behavior of the neurons in the visual cortex of a cat as they moved an image across it's area of vision. During their studies, they observed that the image shown and the orientation affects directly how the neurons fires and activates themselves.
 
 - CNNs explained
+  - convolution
+  - detective deduction by machine
 
 - study materials
+  - videos
+  - textbooks
+  - mathematics
 
 ## Keras, deep learning simplified
 - Sequential model
@@ -51,10 +45,10 @@ The basis of computer vision and CNNs were laid down in the early 1950s by Hubel
 - optimizer
 
 ## Building your first models
-- Dataset
-- Preprocessing
+- dataset
+- preprocessing
 - model Building
-- Training
+- training
 
 ## Visualizing your CNN
 - activation based
@@ -64,3 +58,6 @@ The basis of computer vision and CNNs were laid down in the early 1950s by Hubel
 
 ## Improving your model
 Coming soon, I'm still tuning the model to get a right balance of scale and speed
+Update, removed sparse encoding as even a 64x64 image require too long to process on a home desktop level computer.
+Plans
+- focus more on img augmentation / alternative optimization / model structure changes / batch wised training
