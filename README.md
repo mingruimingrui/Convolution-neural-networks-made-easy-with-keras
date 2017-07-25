@@ -29,9 +29,11 @@ The goal of this article is to allow anyone with coding abilities to create thei
 ### Brief history
 In the summer of 2012 ImageNet hosted it's annual Large Scale Visual Recognition Challenge to pit some of the world's most intelligent groups against one another. Alexnet was a deep convolution neural network model submitted in this competition. A good model classification error rate is typically around 25-26%. The second placed model in the competition was able to achieve an impressive 26.2% rate of error. Alexnet scored 15.3%. An unprecedented margin that is over 10% better than the next best model. That was the moment that many people believed marked the beginning of a new age in the field of computer vision.
 
-<p align="center"><img src="/imgs/ILSVRC2012finalists.JPG", width="360"></p>
+<p align="center"><img src="/imgs/ILSVRC2012finalists.jpg", width="360"></p>
 
 The basis of computer vision and CNNs were laid down in the early 1950s by Hubel and Wiesel when they studied the behavior of the neurons in the visual cortex of a cat as they moved an image across it's area of vision. During their studies, they observed that the image shown and the orientation affects directly how the neurons fires and activates themselves.
+
+<p align="center"><img src="/imgs/hubel-wiesel-experiment.jpg", width="360"></p>
 
 - CNNs explained
   - convolution
