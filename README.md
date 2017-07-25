@@ -6,9 +6,9 @@ Image recognition is the task of taking an image and labelling it. For us humans
 
 <p align="center"><img src="https://naushadsblog.files.wordpress.com/2014/01/pixel.gif", width="360"></p>
 
-When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings processes images but scientists today are able to simulate a process similar to what we humans are capable of, albeit at a much more basic level, and this technique is called deep learning.
+When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings processes images but scientists today have figured out a technique to simulate this process, albeit at a basic level. We call this technique deep learning.
 
-There are many good resources out there that teaches you how to build your very own deep learning model but in this guide, we shall focus on one of the most revolutionary and now widely used one, called a convolution neural network (or CNN for short).
+There are many good resources out there that teaches you how to build your very own deep learning model but in this guide, we shall focus on one of the most revolutionary and fundamental model in recent times, called convolution neural network (or CNN for short).
 
 ## Before we get started
 Though not necessary, some recommended prerequisites to this guide are:
@@ -36,7 +36,9 @@ The goal of this article is to allow anyone with coding abilities to create thei
   - textbooks
   - mathematics
 
+In the summer of 2012 ImageNet hosted it's annual Large Scale Visual Recognition Challenge to pit some of the world's most intelligent groups against one another. Alexnet was a deep convolution neural network model submitted in this competition. A good model classification error rate is typically around 25-26%. The second placed model in the competition was able to achieve an impressive 26.172% rate of error. Alexnet scored 15.315%. An unprecedented margin that is over 10% better than the next best model and that was the moment that many people believed marked the beginning of a new age in the field of computer vision.
 
+The basis of computer vision and CNNs were laid down in the early 1950s when Professors David Hubel and Torsten Wiesel when they studied the behavior of the neurons in the visual cortex of a cat as they moved an image across it's area of vision. During their studies, they observed that the image shown and the orientation affects directly how the neurons fires and activates themselves.
 
 ## Keras, deep learning simplified
 - Sequential model
