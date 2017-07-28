@@ -44,9 +44,11 @@ A typical input image will be broken down into it's individual pixel components.
 <p align="center"><img src="/imgs/filtering.JPG", width="360"></p>
 <p align="center">Fig 1.1 applying a 3x3 filter</p>
 <p align="center"><img src="/imgs/filtering-math.JPG", width="720"></p>
-<p align="center">Fig 1.2 filtering in math</p>
+<p align="center">Fig 1.2 mathematics of filtering</p>
 
-A CNN would then take a small 3x3 pixel chunk from the original image and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original image and summing it up. A simplified example of how the math is done is as described in the picture above but since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and sumed up with another 3x3x3 filter. Then by adding another constant term, we are able to attain a single number result from this transformation.
+A CNN would then take a small 3x3 pixel chunk from the original image and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original image and summing it up. A simplified example of how the math is done is as described in the picture above. (NOW STOP RIGHT HERE! Make sure you understand the mathematics of how to conduct filtering. We will talk about how we arrive at this filter later on.)
+
+Since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and summed up with another 3x3x3 filter. Then by adding another constant term, we are able to attain a single number result from this transformation.
 
 <p align="center"><img src="/imgs/filtering-many-to-one.gif", width="360"></p>
 <p align="center">Fig 1.3 filtering in action, original image is below</p>
@@ -68,6 +70,7 @@ Armed with this knowledge, let us finish up the mechanics of the CNN.
 
 #### Back to mathematical part
 
+<!-- <explain filter stacking> -->
 One filter would only be capable of finding a single simplified feature so on the original image, multiple filters can be applied to identify as many features. Lets say on the original image, a total of 32 filters are applied and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image.
 
 The entire process of transforming an input from a 32x32x3 form to a 30x30x32 form is known as a single convolution layer. An entire CNN model is usually made up of multiple convolution layers and a classifier layer. Here is an example of how a typical CNN would look like.
@@ -79,7 +82,9 @@ The model would take an input from the left (here the image of a car). And the d
 
 - CONV: In the model in the picture, the first layer is a CONV layer. It is nothing new as CONV is just short form for convolution layer.
 
-- RELU: The RELU layer (short for rectifier layer) is basically a transformation of all negative outputs of the previous layer into 0. As negative numbers would also contribute to the output of the next layer, 0 has a significance in the sense that it will not affect the results of the next layer. Looking back at the high-level definition of how a convolution works, negative numbers should mean the absence of a feature. 0 would fit that idea more concisely and that is the purpose of this layer. The RELU layer will not transform the shape of it's input. If the input is of shape 30x30x32, the output would still be the same, except all the negatives are now 0s instead.
+- RELU: The RELU layer (short for rectifier layer) is basically a transformation of all negative outputs of the previous layer into 0. As negative numbers would also contribute to the output of the next layer, 0 has a significance in the sense that it will not affect the results of the next layer. Looking back at the high-level definition of how a convolution works, negative numbers should mean the absence of a feature. 0 would fit that idea more concisely and that is the purpose of this layer. We will not change the values of the positive numbers as the magnitude of the positive number can help identify how closely the image represents a feature. The RELU layer will not transform the shape of it's input. If the input is of shape 30x30x32, the output would still be 30x30x32, except all the negatives are now 0s instead.
+
+- POOL: TBI
 
 <!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
 
@@ -105,6 +110,7 @@ The basis of computer vision and CNNs were laid down in the early 1950s by Hubel
 <p align="center"><img src="/imgs/hubel-wiesel-experiment.jpg", width="360"></p> -->
 
 
+### TBI
 
 - CNNs explained
   - convolution
