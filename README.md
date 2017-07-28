@@ -7,6 +7,7 @@ I wrote this article after watching [Andrej Karpathy's lecture](https://www.yout
 Image recognition is the task of taking an image and labelling it. For us humans, this is one of the first skills we learn from the moment we are born and is one that comes naturally and effortlessly. By the time we reach adulthood we are able to immediately recognize patterns and put labels onto objects we see. These skills to quickly identify images, generalized from prior knowledge, are ones that we do not share with our machines.
 
 <p align="center"><img src="https://naushadsblog.files.wordpress.com/2014/01/pixel.gif", width="360"></p>
+<p align="center">Fig 0.0 how a machine 'views' a picture</p>
 
 When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings process images but scientists today have figured out a technique to simulate this process, albeit at a basic level. We call this technique deep learning.
 
@@ -33,14 +34,17 @@ Image recognition used to be done using much simpler methods such as linear regr
 ### CNNs explained
 But first, let us understand what a convolution is without relating it to any of the brain stuff.
 
-#### The mechanical part
+#### The mathematical part
 
 <p align="center"><img src="/imgs/input-image-dimension.JPG", width="240"></p>
+<p align="center">Fig 1.0 simplified depiction of a 32x32x3 image</p>
 
-A typical input image will be broken down into it's individual pixel components. In the picture above, we have a 32x32 pixel picture which has a R, G, and B value attached to each pixel, therefore a 32x32x3 input.
+A typical input image will be broken down into it's individual pixel components. In the picture above, we have a 32x32 pixel picture which has a R, G, and B value attached to each pixel, therefore a 32x32x3 input, Also known as an input with 32 height, 32 width, and 3 depth.
 
 <p align="center"><img src="/imgs/filtering.JPG", width="360"></p>
+<p align="center">Fig 1.1 applying a 3x3 filter</p>
 <p align="center"><img src="/imgs/filtering-math.JPG", width="720"></p>
+<p align="center">Fig 1.2 filtering in math</p>
 
 A CNN would then take a small 3x3 pixel chunk from the original picture and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original picture and summing it up. A simplified example of how the math is done is as described in the picture above but since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and sumed up with another 3x3x3 filter. Then by adding another constant term, we are able to attain a single number result from this transformation.
 
@@ -53,6 +57,7 @@ This same filter will then be applied to every single possible 3x3 pixel on the 
 What we are trying to do here is to detect the presence of simple patterns such as horizontal lines and color contrasts from the original picture. The process as described above will output a single number. Typically this number will be either positive or negative. We can image positive as meaning the presence of a certain feature and negative as the absence of the feature.
 
 <p align="center"><img src="/imgs/finding-horizontal-vertical.jpg", width="540"></p>
+<p align="center">Fig 1.3 identifying vertical and horizontal lines through filtering</p>
 
 In the image above, a filter is applied to find vertical and horizontal lines and as we can see, in each of the pictures on the left, only the places where vertical lines are present will show up in white and likewise horizontal lines for the picture on the right.
 
