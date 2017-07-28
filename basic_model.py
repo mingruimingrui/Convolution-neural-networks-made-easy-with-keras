@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 import numpy as np
 import keras
-from keras.preprocessing.image import ImageDataGenerator
 from keras.datasets import cifar10
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
@@ -84,20 +83,9 @@ def generate_model():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
-    # Conv2 8 8 (128)
-    model.add(Conv2D(128, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv2D(128, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-
     # FC
     model.add(Flatten())
     model.add(Dense(512))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(256))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     model.add(Dense(num_classes))
@@ -112,27 +100,9 @@ def generate_model():
 
     return model
 
-def image_generator():
-    return ImageDataGenerator(
-        featurewise_center=False,  # set input mean to 0 over the dataset
-        samplewise_center=False,  # set each sample mean to 0
-        featurewise_std_normalization=False,  # divide inputs by std of the dataset
-        samplewise_std_normalization=False,  # divide each input by its std
-        zca_whitening=False,  # apply ZCA whitening
-        rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
-        zoom_range=0.1, # randomly zoom in on images by (percentage)
-        width_shift_range=0.05,  # randomly shift images horizontally (fraction of total width)
-        height_shift_range=0.05,  # randomly shift images vertically (fraction of total height)
-        horizontal_flip=True,  # randomly flip images
-        vertical_flip=False
-    )
-
 def train(model, X_train, y_train, X_test, y_test):
-    sys.stdout.write('Training model with data augmentation\n\n')
+    sys.stdout.write('Training model\n\n')
     sys.stdout.flush()
-
-    datagen = image_generator()
-    datagen.fit(X_train)
 
     # train each iteration individually to back up current state
     # safety measure against potential crashes
@@ -141,10 +111,8 @@ def train(model, X_train, y_train, X_test, y_test):
         epoch_count += 1
         sys.stdout.write('Epoch count: ' + str(epoch_count) + '\n')
         sys.stdout.flush()
-        model.fit_generator(datagen.flow(X_train, y_train, batch_size=batch_size),
-                            steps_per_epoch=len(X_train) // batch_size,
-                            epochs=1,
-                            validation_data=(X_test, y_test))
+        model.fit(X_train, y_train, batch_size=batch_size,
+                  nb_epoch=1, validation_data=(X_test, y_test))
         sys.stdout.write('Epoch {} done, saving model to file\n\n'.format(epoch_count))
         sys.stdout.flush()
         model.save_weights('./models/convnet_weights.h5')

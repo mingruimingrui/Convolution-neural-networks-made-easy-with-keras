@@ -2,19 +2,6 @@
 models/convnet_model.json
 models/convnet_weights.h5
 
-# encode_images.py
-data/X_64.npy
-data/X_train_64.npy
-data/y_train_64.npy
-data/X_test_64.npy
-data/y_test_64.npy
-
-# improved_attempt_preprocessing.py
-data/X_train_64_preprocessed.npy
-data/y_train_64_preprocessed.npy
-data/X_test_64_preprocessed.npy
-data/y_test_64_preprocessed.npy
-
-# improved_attempt_training.py
-models/convnet_model_64.json
-models/convnet_weights_64.h5
+# improved_model.py
+models/convnet_improved_model.json
+models/convnet_improved_weights.h5

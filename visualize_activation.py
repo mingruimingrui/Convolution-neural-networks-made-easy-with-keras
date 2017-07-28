@@ -30,6 +30,11 @@ def get_dataset():
     return X_train, y_train, X_test, y_test
 
 def load_model():
+    if (Path('./models/convnet_improved_model.json').is_file() == False) | (Path('./models/convnet_improved_model.json').is_file() == False):
+        sys.std.write('Please train model using basic_model.py first')
+        sys.std.flush()
+        raise SystemExit
+
     with open(model_path) as file:
         model = keras.models.model_from_json(json.load(file))
         file.close()
@@ -104,4 +109,6 @@ def main():
     X, y, _, _ = get_dataset()
     visualize(X, y)
 
-main()
+if __name__ == "__main__":
+    # execute only if run as a script
+    main()

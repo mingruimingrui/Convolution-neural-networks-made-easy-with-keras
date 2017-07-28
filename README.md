@@ -31,15 +31,41 @@ The goal of this article is to allow anyone with coding abilities to create thei
 Image recognition used to be done using much simpler methods such as linear regression and comparison of similarities. The results were obviously not very good, even the simple task of recognizing hand-written alphabets proved difficult. Convolution neural networks (CNNs) are supposed to be a step up from what we traditionally do by offering a computationally cheap method of effectively simulating the neural activities of a human brain when it perceives images.
 
 ### CNNs explained
-First, let us talk about what sort of mathematics a convolution neural network does without any of the brain stuff.
+But first, let us understand what a convolution is without relating it to any of the brain stuff.
+
+#### The mechanical part
 
 <p align="center"><img src="/imgs/input-image-dimension.JPG", width="240"></p>
 
 A typical input image will be broken down into it's individual pixel components. In the picture above, we have a 32x32 pixel picture which has a R, G, and B value attached to each pixel, therefore a 32x32x3 input.
 
-<p align="center"><img src="/imgs/filtering.JPG", width="240"></p>
+<p align="center"><img src="/imgs/filtering.JPG", width="360"></p>
+<p align="center"><img src="/imgs/filtering-math.JPG", width="720"></p>
 
-A CNN would then break down the original into small 3x3 pixel chunks and transform it into a  in a process called filtering. The picture below shows how it does this.
+A CNN would then take a small 3x3 pixel chunk from the original picture and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original picture and summing it up. A simplified example of how the math is done is as described in the picture above but since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and sumed up with another 3x3x3 filter. Then by adding another constant term, we are able to attain a single number result from this transformation.
+
+<p align="center"><img src="/imgs/filtering-many-to-one.gif", width="360"></p>
+
+This same filter will then be applied to every single possible 3x3 pixel on the original image. And the end result would be a 2nd 'image' which would be of the size 30x30x1. Reason being, there are only 30x30 3x3 pixel squares on a 32x32 pixel picture.
+
+#### The high-level explanation
+
+What we are trying to do here is to detect the presence of simple patterns such as horizontal lines and color contrasts from the original picture. The process as described above will output a single number. Typically this number will be either positive or negative. We can image positive as meaning the presence of a certain feature and negative as the absence of the feature.
+
+<p align="center"><img src="/imgs/finding-horizontal-vertical.jpg", width="540"></p>
+
+In the image above, a filter is applied to find vertical and horizontal lines and as we can see, in each of the pictures on the left, only the places where vertical lines are present will show up in white and likewise horizontal lines for the picture on the right.
+
+Going by this idea we can think of filtering as a process of breaking down the original picture into a list of presence of simplified structures. By knowing the presence of slanted lines and horizontal lines and other simple basic information, more interesting features such as eyes and nose and mouth then then be identified and if there is the presence of an eye and a mouth and a nose, then the classifier will have a pretty good certainty that the image at hand is probably a face. Basically that is what a CNN would do, by doing detective work on the abstract information that it is able to extract from the input image and through a somewhat logical thought process come to the deduction of the correct label to attach to a particular image.
+
+Armed with this knowledge, understanding the rest of the CNN would be a breeze.
+
+### Back to mechanical part
+
+One filter would only be capable of finding a single simplified feature so on the original image, multiple filters can be applied to identify as many features. Lets say on the original image, a total of 32 filters are applied and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image.
+
+
+
 
 
 
