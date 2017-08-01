@@ -128,17 +128,17 @@ To translate this into mathematics, let us first define a few terms,
   <dd>Represents the predicted label of the image</dd>
 </dl>
 
-When we take our predicted result and subtract it from our actual result, we get this back,
+When you take the predicted result and subtract it from our actual result, you get this back,
 
 > <p><img src="/imgs/residual.JPG", width="80"></p>
 
-One way of interpreting this is by viewing it as a measure of how far off we are from our desired result (also called the error). An error of 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, we will be able to get a gauge of how well a set of parameters (for filters) are doing. The greater the average error, the more off our predictions are, which prompts us to change the parameters we are using.
+One way of interpreting this is by viewing it as a measure of how far off the model is from the desired result (also called the error). An error of 0 would mean that the model is spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, you will be able to get a gauge of how well a set of parameters are doing. The greater the average error, the more inaccurate the predictions are, which prompts you to change the current set of parameters.
 
 <p>Lets take the example of the case were we have 3 images, the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.jpg", width="40"></p>
 
-That does not mean that the CNN makes perfect predictions and obviously we have applied the wrong way of accumulating errors. A simple modification will fix this issue, by squaring our errors.
+That does not mean that the predictions the CNN made are all correct. The error lies in the way error is accumulated as there are both positive and negative errors and they will cancel each other out. A simple modification will fix this, by squaring the errors you will force all errors to be positive.
 
-> <p><img src="/imgs/summation-symbol.JPG", width="30">, this symbol just means summation in the context below, it means for all images, sum up  (the term inside)</p>
+> <p><img src="/imgs/summation-symbol.JPG", width="30">, this symbol just means summation. In the context below, it means for all images, sum up (the term inside)</p>
 
 From this,
 
@@ -148,25 +148,52 @@ we will get this,
 
 > <p><img src="/imgs/sum-residual-square.JPG", width="90"></p>
 
-So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3.
+and of course to account for averaging,
 
-The lower this number comes out to be, the closer you are to the most optimum set of parameters for the CNN. Or in short, all of the following are the same
+> <p><img src="average-squared-error.JPG", width="100"></p>
+
+So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3. The more we attempt to minimize this equation, the closer we are to the optimal set of parameters. Minimization also has a symbol for convenience.
+
+> <p><img src="cost-function.JPG", width="120"></p>
+
+For clarity sake, lets replace our predicted y in place of another variable.
+
+> <p><img src="/imgs/y-hat2.JPG", width="80"></p>
+
+Where A is simply represents the series of transformation we apply onto x (our original image) to arrive at the prediction of the label of x. We can then put that into the equation we are attempting to minimize.
+
+> <p><img src="cost-function2.JPG", width="120"></p>
+
+Take note that here, x and y are both fixed based on the input images you have provided the CNN with. There only thing we can change to minimize this equation is A, the parameters of all the layers of filters in the CNN. If minimizing this equation also means to making the CNN more accurate, then that would be the same as solving the original English problem.
 
 > _to find a set of parameters that allows the model to be as accurate at labelling images as possible_
 
-> _minimizing the average squared error_
+The question of how we arrive at the optimal filter is still unanswered but to solve this,
 
-> <p><i>minimizing the average squared <img src="/imgs/residual3.JPG", width="80"></i></p>
+> <p><img src="cost-function2.JPG", width="120"> (also known as the cost function)</p>
 
-> <p><i>minimizing the average <img src="/imgs/residual-squared.JPG", width="80"></i></p>
+there is an area of Mathematics dedicated to solving this easily called gradient descent.
 
-> <p><i>minimizing <img src="/imgs/sum-residual-square.JPG", width="90"> divided by the total number of images</i></p>
+### Gradient descent
 
-> <p><i>minimizing <img src="/imgs/average-squared-error.JPG", width="100"></i></p>
+Let us first plot a simple graph.
 
-> <p><i><img src="/imgs/cost-function.JPG", width="120"></i></p>
+<!-- image here -->
 
+Imagine this, you have a horizontal axis. This axis is composed of all the different unique parameters, _A_, all mapped out onto a line. Each point on this axis represents a unique _A_.
 
+The vertical axis represents the average error at that specific _A_ (the cost in terms of model inaccuracy therefore the name cost function). As one can expect, the average error will not be a linear function, rather it will be curved, like in the image above.
+
+<!-- image here -->
+
+Recall that minimizing this average error will result in a more accurate model. Therefore, the point where the curve dips lowest corresponds to the set of parameters which allows the model to perform best. Let us call this point A-optimal. Finding A-optimal is however not an easy task. In the CNN, there can be hundreds of filters and thousands of parameters. We cannot calculate the average error for every possible combination of these parameters. The following steps describe how we can approach an A which is close to A-optimal.
+
+1. Randomly select a set of parameters, A (In the image, we have selected A1). Calculate the average error at this point.
+2. Look at the close neighbors of A1 and select the one which reduces the average error most.
+3. Move to the neighboring point which reduces average error most. We call this point A2.
+4. Repeat steps 2-3 until you reach a flat area.
+
+The flat area you reach at the end of these steps 
 
 
 
