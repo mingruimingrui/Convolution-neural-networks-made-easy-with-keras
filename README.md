@@ -128,12 +128,17 @@ To translate this into mathematics, let us first define a few terms,
   <dd>Represents the predicted label of the image</dd>
 </dl>
 
-<p>When we take our predicted result, <img src="/imgs/y-hat.JPG", width="20"> and subtract it from our actual result, <img src="/imgs/y.JPG", width="20">, we get this back,</p>
+When we take our predicted result and subtract it from our actual result, we get this back,
 
 <p><img src="/imgs/residual.JPG", width="80"></p>
 
-<p>One way of interpreting <img src="/imgs/residual.JPG", width="60"> is a measure of how far off we are from our desired result (also called the error). An error of 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made.</p>
+One way of interpreting this is by viewing it as a measure of how far off we are from our desired result (also called the error). An error of 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, we will be able to get a gauge of how well a set of parameters (for filters) are doing. The greater the average error, the more off our predictions are, which prompts us to change the parameters we are using.
 
+<p>Lets take the example of the case were we have 3 images, the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.JPG", width="80"></p>
+
+That does not mean that the CNN makes perfect predictions and obviously we have applied the wrong way of accumulating errors. A simple modification will fix this issue, by squaring our errors.
+
+> <p><img src="/imgs/summation-symbol.JPG", width="30">, this symbol just means sum up all</p>
 
 <!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
 
