@@ -128,11 +128,11 @@ To translate this into mathematics, let us first define a few terms,
   <dd>Represents the predicted label of the image</dd>
 </dl>
 
-When we take our predicted result, <img src="/imgs/y-hat.JPG", width="30"> and subtract it from our actual result, <img src="/imgs/y.JPG", width="30">, we get this back,
+<p>When we take our predicted result, <img src="/imgs/y-hat.JPG", width="20"> and subtract it from our actual result, <img src="/imgs/y.JPG", width="20">, we get this back,</p>
 
-<img src="/imgs/residual.JPG">
+<p><img src="/imgs/residual.JPG", width="80"></p>
 
-One way of interpreting <img src="/imgs/residual.JPG", width="30"> is a measure of how far off we are from our desired result, <img src="/imgs/y-hat.JPG", width="30">. A value of <img src="/imgs/residual.JPG", width="30"> = 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made.
+<p>One way of interpreting <img src="/imgs/residual.JPG", width="60"> is a measure of how far off we are from our desired result (also called the error). An error of 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made.</p>
 
 
 <!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
