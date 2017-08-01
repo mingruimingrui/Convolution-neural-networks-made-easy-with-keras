@@ -150,31 +150,19 @@ we will get this,
 
 So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3.
 
-The lower this number comes out to be, the closer you are to the most optimum set of parameters for the CNN. Or in short,
+The lower this number comes out to be, the closer you are to the most optimum set of parameters for the CNN. Or in short, all of the following are the same
 
 > _to find a set of parameters that allows the model to be as accurate at labelling images as possible_
 
-is equal to
-
 > _minimizing the average squared error_
-
-is equal to
 
 > <p><i>minimizing the average squared <img src="/imgs/residual3.JPG", width="80"></i></p>
 
-is equal to
-
 > <p><i>minimizing the average <img src="/imgs/residual-squared.JPG", width="80"></i></p>
-
-is equal to
 
 > <p><i>minimizing <img src="/imgs/sum-residual-square.JPG", width="90"> divided by the total number of images</i></p>
 
-is equal to
-
 > <p><i>minimizing <img src="/imgs/average-squared-error.JPG", width="100"></i></p>
-
-is equal to
 
 > <p><i><img src="/imgs/cost-function.JPG", width="120"></i></p>
 
