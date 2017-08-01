@@ -146,7 +146,7 @@ From this,
 
 we will get this,
 
-> <p><img src="/imgs/sum-residual-square.JPG", width="80"></p>
+> <p><img src="/imgs/sum-residual-square.JPG", width="90"></p>
 
 So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3.
 
@@ -160,15 +160,15 @@ is equal to
 
 is equal to
 
-> _<p>minimizing the average squared <img src="/imgs/residual.JPG", width="80"></p>_
+> <p><i>minimizing the average squared <img src="/imgs/residual.JPG", width="80"></i></p>
 
 is equal to
 
-> _<p>minimizing the average <img src="/imgs/residual.JPG", width="80"></p>_
+> <p><i>minimizing the average <img src="/imgs/residual.JPG", width="80"></i></p>
 
 is equal to
 
-> _the average <p><img src="/imgs/cost-function.JPG", width="80"></p>_
+> <p><i>the average <img src="/imgs/cost-function.JPG", width="80"></i></p>
 
 
 
