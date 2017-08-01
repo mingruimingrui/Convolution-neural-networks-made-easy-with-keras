@@ -118,15 +118,21 @@ The problem is this,
 To translate this into mathematics, let us first define a few terms,
 
 <dl>
-  <dt>x</dt>
+  <dt><img src="/imgs/x.JPG"></dt>
   <dd>Represents the original image</dd>
 
-  <dt>y</dt>
+  <dt><img src="/imgs/y.JPG"></dt>
   <dd>Represents the actual label of the image</dd>
 
-  <dt><img src="/imgs/y-hat.gif"></dt>
+  <dt><img src="/imgs/y-hat.JPG"></dt>
   <dd>Represents the predicted label of the image</dd>
 </dl>
+
+When we take our predicted result, <img src="/imgs/y-hat.JPG"> and subtract it from our actual result, <img src="/imgs/y.JPG">, we get this back,
+
+<img src="/imgs/residual.JPG">
+
+One way of interpreting <img src="/imgs/residual.JPG"> is a measure of how far off we are from our desired result, <img src="/imgs/y-hat.JPG">. A value of <img src="/imgs/residual.JPG"> = 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made.
 
 
 <!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
