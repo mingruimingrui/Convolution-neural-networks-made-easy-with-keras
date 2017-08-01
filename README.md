@@ -172,11 +172,11 @@ is equal to
 
 is equal to
 
-> <p><i>minimizing <img src="/imgs/average-squared-error.JPG", width="90"></i></p>
+> <p><i>minimizing <img src="/imgs/average-squared-error.JPG", width="100"></i></p>
 
 is equal to
 
-> <p><i><img src="/imgs/cost-function.JPG", width="100"></i></p>
+> <p><i><img src="/imgs/cost-function.JPG", width="120"></i></p>
 
 
 
