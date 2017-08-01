@@ -1,7 +1,7 @@
 # Convolution neural networks made easy with keras
 By Wang Ming Rui
 
-I wrote this article after watching [Andrej Karpathy's lecture](https://www.youtube.com/watch?v=AQirPKrAyDg&t=3200s) on YouTube and realized how easy it actually is to implement a basic deep learning model. This article is meant as a guide for people wishing to get into machine learning and deep learning models. Some will find the things covered here easier so feel free to speed through! If you do not consider yourself a highly-technical person, I try my best to keep things as simple as possible. Do remember to read every sentence and do multiple re-reads on parts that you do not fully understand to boost your understanding!
+> I wrote this article after watching [Andrej Karpathy's lecture](https://www.youtube.com/watch?v=AQirPKrAyDg&t=3200s) on YouTube and realized how easy it actually is to implement a basic deep learning model. This article is meant as a guide for people wishing to get into machine learning and deep learning models. Some will find the things covered here easier so feel free to speed through! If you do not consider yourself a highly-technical person, I try my best to keep things as simple as possible. Do remember to read every sentence and do multiple re-reads on parts that you do not fully understand to boost your understanding!
 
 ## Introduction
 Image recognition is the task of taking an image and labelling it. For us humans, this is one of the first skills we learn from the moment we are born and is one that comes naturally and effortlessly. By the time we reach adulthood we are able to immediately recognize patterns and put labels onto objects we see. These skills to quickly identify images, generalized from prior knowledge, are ones that we do not share with our machines.
@@ -46,7 +46,7 @@ A typical input image will be broken down into it's individual pixel components.
 <p align="center"><img src="/imgs/filtering-math.JPG", width="720"></p>
 <p align="center">Fig 1.2 mathematics of filtering</p>
 
-A CNN would then take a small 3x3 pixel chunk from the original image and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original image and summing it up. A simplified example of how the math is done is as described in the picture above. NOW STOP RIGHT HERE! Make sure you understand the mathematics of how to conduct filtering. Re-read the contents if you need to. We will talk about how filters are made later on.
+A CNN would then take a small 3x3 pixel chunk from the original image and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original image and summing it up. A simplified example of how the math is done is as described in the picture above. NOW STOP RIGHT HERE! Make sure you understand the mathematics of how to conduct filtering. Re-read the contents if you need to. As for how we arrive at this filter and why it is of the size 3x3, we will explain later in this article.
 
 Since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and summed up with another 3x3x3 filter. Then by adding another constant term, we will receive a single number result from this transformation.
 
@@ -66,11 +66,10 @@ In the image above, a filter is applied to find vertical and horizontal lines an
 
 Going by this idea we can think of filtering as a process of breaking down the original image into a list of presence of simplified structures. By knowing the presence of slanted lines and horizontal lines and other simple basic information, more interesting features such as eyes and nose and mouth then then be identified and if there is the presence of an eye and a mouth and a nose, then the classifier will have a pretty good certainty that the image at hand is probably a face. Basically that is what a CNN would do, by doing detective work on the abstract information that it is able to extract from the input image and through a somewhat logical thought process come to the deduction of the correct label to attach to a particular image.
 
-Armed with this knowledge, let us finish up the mechanics of the CNN.
+Make sure that you have understood all that were covered previously because the next section is going to progress at a much faster rate. We are still not going to talk about how to calculate filters yet. First, let us finish up the mechanics of the CNN.
 
-#### Back to mathematical part
+#### Back to the model
 
-<!-- <explain filter stacking> -->
 One filter would only be capable of finding a single simplified feature on the original image. Multiple filters can be applied to identify multiple features. Lets say on the original image, a total of 32 filters are applied on the input 32x32x3 image, and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image. A step by step explanation of how to do this is as follows,
 
 1. generate a set of 32 filters of size 3x3x3 each
@@ -90,7 +89,34 @@ The model would take an input from the left (here the image of a car). And the d
 
 - RELU: The RELU layer (short for rectifier layer) is basically a transformation of all negative outputs of the previous layer into 0. As negative numbers would also contribute to the output of the next layer, 0 has a significance in the sense that it will not affect the results of the next layer. Looking back at the high-level definition of how a convolution works, negative numbers should mean the absence of a feature. 0 would fit that idea more concisely and that is the purpose of this layer. We will not change the values of the positive numbers as the magnitude of the positive number can help identify how closely the image represents a feature. The RELU layer will not transform the shape of it's input. If the input is of shape 30x30x32, the output would still be 30x30x32, except all the negatives are now 0s instead.
 
-- POOL: TBI
+<p align="center"><img src="/imgs/max-pooling.jpeg", width="540"></p>
+<p align="center">Fig 1.6 pooling on a 4x4 input</p>
+
+- POOL: Image processing is a very computationally intensive process. To allow our algorithm to run at a decent speed while not compromising accuracy too heavily, we do a form of reduction on the image size in a technique called pooling. The image above shows how it is done. From each 2x2 square, we find the pixel with the largest value, retain it and throw away all the unused pixels we also do this for each depth layer (recall on the input image, it would be each color layer). Doing this transformation would essentially reduce the dimensions of the original image by half on height and another half on weight. Another reason why we wish to do this is to converge features of close proximity together such that more complex features can develop sooner.
+
+The act of repeating the process of CONV RELU POOL would simulate the process of reinforcing the complexity of the features gathered from the original image.
+
+- FC: After retrieving all of the advanced features from each image, we combine them together to classify the image to it's proper label. We do so in the fully connected layer.
+
+<p align="center"><img src="/imgs/fully-connected-layer.JPG", width="540"></p>
+<p align="center">Fig 1.7 A simple fully connected layer displaying what it does</p>
+
+The fully connected layer, will take in all of the features produced from the prior convolution layers and output the probability of the image being of each particular label. Remember that the purpose of the convolution layers are to output the presence of advanced features such as eyes, mouth, or wings. By taking note of the presence of such features, the fully connected layer will do the last bit of detective work to determine the most suitable label to apply to each image. Mathematically, it works in the same way as filters do except this time, there's no 3x3 portions. Each 'filter' in this case will be the same size as the output layer from the final layer of convolution. There can however be multiple 'filters' but just as many as the number of label classes you have, the intuition being that you can calculate the confidence level of each individual class separately.
+
+Do keep in mind, this is just a very basic understanding of what the fully connected layer does. In actuality this layer can be much more complex but first, a much long awaited question should be answered.
+
+### Where filter weights come from
+
+> Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into a simple term that it could, either a feature is present or it is not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains. Such an algorithm must require some very specific parameters (we usually call them weights) in the filter layers else the entire model would fail to function. Some of you might not be comfortable to hear this answer but do not be alarmed! This same problem, almost impossible to solve through the English language, can be easily solved through the language of Mathematics.
+
+The problem is this,
+
+> _find a set of parameters that allows the model to be as accurate at labelling images as possible_
+
+To translate this into mathematics, let us first define a few terms,
+
+> _y_ is the
+
 
 <!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
 
