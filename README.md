@@ -168,15 +168,15 @@ is equal to
 
 is equal to
 
-> <p><i>minimizing <img src="/imgs/sum-residual-squared.JPG", width="80"> divided by the total number of images</i></p>
+> <p><i>minimizing <img src="/imgs/sum-residual-square.JPG", width="90"> divided by the total number of images</i></p>
 
 is equal to
 
-> <p><i>minimizing <img src="/imgs/averaged-squared-error.JPG", width="80"></i></p>
+> <p><i>minimizing <img src="/imgs/average-squared-error.JPG", width="90"></i></p>
 
 is equal to
 
-> <p><i><img src="/imgs/cost-function.JPG", width="80"></i></p>
+> <p><i><img src="/imgs/cost-function.JPG", width="100"></i></p>
 
 
 
