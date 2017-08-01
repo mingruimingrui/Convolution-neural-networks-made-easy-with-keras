@@ -113,7 +113,7 @@ CNN is an algorithm that requires some very specific parameters (we also call th
 
 The problem is this,
 
-> _find a set of parameters that allows the model to be as accurate at labelling images as possible_
+> _to find a set of parameters that allows the model to be as accurate at labelling images as possible_
 
 To translate this into mathematics, let us first define a few terms,
 
@@ -130,24 +130,45 @@ To translate this into mathematics, let us first define a few terms,
 
 When we take our predicted result and subtract it from our actual result, we get this back,
 
-<p><img src="/imgs/residual.JPG", width="80"></p>
+> <p><img src="/imgs/residual.JPG", width="80"></p>
 
 One way of interpreting this is by viewing it as a measure of how far off we are from our desired result (also called the error). An error of 0 would mean that we are spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, we will be able to get a gauge of how well a set of parameters (for filters) are doing. The greater the average error, the more off our predictions are, which prompts us to change the parameters we are using.
 
-<p>Lets take the example of the case were we have 3 images, the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.jpg", width="80"></p>
+<p>Lets take the example of the case were we have 3 images, the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.jpg", width="40"></p>
 
 That does not mean that the CNN makes perfect predictions and obviously we have applied the wrong way of accumulating errors. A simple modification will fix this issue, by squaring our errors.
 
-> <p><img src="/imgs/summation-symbol.JPG", width="30">, this symbol just means sum up all</p>
+> <p><img src="/imgs/summation-symbol.JPG", width="30">, this symbol just means summation in the context below, it means for all images, sum up  (the term inside)</p>
 
-<!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
+From this,
 
- <!-- and the benefits of doing so is manifold. Having a smaller image would mean faster processing time. Also by converging -->
+> <p><img src="/imgs/sum-residual-wrong.JPG", width="80"></p>
 
+we will get this,
 
+> <p><img src="/imgs/sum-residual-square.JPG", width="80"></p>
 
+So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3.
 
+The lower this number comes out to be, the closer you are to the most optimum set of parameters for the CNN. Or in short,
 
+> _to find a set of parameters that allows the model to be as accurate at labelling images as possible_
+
+is equal to
+
+> _minimizing the average squared error_
+
+is equal to
+
+> _<p>minimizing the average squared <img src="/imgs/residual.JPG", width="80"></p>_
+
+is equal to
+
+> _<p>minimizing the average <img src="/imgs/residual.JPG", width="80"></p>_
+
+is equal to
+
+> _the average <p><img src="/imgs/cost-function.JPG", width="80"></p>_
 
 
 
@@ -165,10 +186,6 @@ The basis of computer vision and CNNs were laid down in the early 1950s by Hubel
 
 
 ### TBI
-
-- CNNs explained
-  - convolution
-  - detective deduction by machine
 
 - study materials
   - videos
