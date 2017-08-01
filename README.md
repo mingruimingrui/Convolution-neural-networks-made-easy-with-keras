@@ -160,15 +160,25 @@ is equal to
 
 is equal to
 
-> <p><i>minimizing the average squared <img src="/imgs/residual.JPG", width="80"></i></p>
+> <p><i>minimizing the average squared <img src="/imgs/residual3.JPG", width="80"></i></p>
 
 is equal to
 
-> <p><i>minimizing the average <img src="/imgs/residual.JPG", width="80"></i></p>
+> <p><i>minimizing the average <img src="/imgs/residual-squared.JPG", width="80"></i></p>
 
 is equal to
 
-> <p><i>the average <img src="/imgs/cost-function.JPG", width="80"></i></p>
+> <p><i>minimizing <img src="/imgs/sum-residual-squared.JPG", width="80"> divided by the total number of images</i></p>
+
+is equal to
+
+> <p><i>minimizing <img src="/imgs/averaged-squared-error.JPG", width="80"></i></p>
+
+is equal to
+
+> <p><i><img src="/imgs/cost-function.JPG", width="80"></i></p>
+
+
 
 
 
