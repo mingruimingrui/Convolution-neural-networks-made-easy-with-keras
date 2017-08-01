@@ -99,7 +99,7 @@ The act of repeating the process of CONV RELU POOL would simulate the process of
 - FC: After retrieving all of the advanced features from each image, we combine them together to classify the image to it's proper label. We do so in the fully connected layer.
 
 <p align="center"><img src="/imgs/fully-connected-layer.JPG", width="540"></p>
-<p align="center">Fig 1.7 A simple fully connected layer displaying what it does</p>
+<p align="center">Fig 1.7 A simple fully connected layer displaying probability outputs</p>
 
 The fully connected layer, will take in all of the features produced from the prior convolution layers and output the probability of the image being of each particular label. Remember that the purpose of the convolution layers are to output the presence of advanced features such as eyes, mouth, or wings. By taking note of the presence of such features, the fully connected layer will do the last bit of detective work to determine the most suitable label to apply to each image. Mathematically, it works in the same way as filters do except this time, there's no 3x3 portions. Each 'filter' in this case will be the same size as the output layer from the final layer of convolution. There can however be multiple 'filters' but just as many as the number of label classes you have, the intuition being that you can calculate the confidence level of each individual class separately.
 
@@ -107,7 +107,9 @@ Do keep in mind, this is just a very basic understanding of what the fully conne
 
 ### Where filter weights come from
 
-> Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into a simple term that it could, either a feature is present or it is not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains. Such an algorithm must require some very specific parameters (we usually call them weights) in the filter layers else the entire model would fail to function. Some of you might not be comfortable to hear this answer but do not be alarmed! This same problem, almost impossible to solve through the English language, can be easily solved through the language of Mathematics.
+> Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into a simple term that it could, either a feature is present or it is not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains.
+
+CNN is an algorithm that requires some very specific parameters (we also call them weights) in the filter layers else the entire model would fail to function. Some of you might not be comfortable to hear this but do not be alarmed! To solve this problem we will have to make use of Mathematics.
 
 The problem is this,
 
@@ -115,7 +117,16 @@ The problem is this,
 
 To translate this into mathematics, let us first define a few terms,
 
-> _y_ is the
+<dl>
+  <dt>x</dt>
+  <dd>Represents the original image</dd>
+
+  <dt>y</dt>
+  <dd>Represents the actual label of the image</dd>
+
+  <dt><img src="/imgs/y-hat.gif"></dt>
+  <dd>Represents the predicted label of the image</dd>
+</dl>
 
 
 <!-- - POOL: POOL is also called the pooling layer. The main purpose of the pooling layer is to reduce the size of the input for the following layers.  -->
