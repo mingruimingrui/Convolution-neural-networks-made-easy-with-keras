@@ -67,27 +67,33 @@ def generate_model():
 
     model = Sequential()
 
-    # Conv1 32 32 (32)
-    model.add(Conv2D(32, (3, 3), padding='same', input_shape=X_shape[1:]))
+    # Conv1 32 32 (3) => 30 30 (32)
+    model.add(Conv2D(32, (3, 3), input_shape=X_shape[1:]))
     model.add(Activation('relu'))
-    model.add(Conv2D(32, (3, 3), padding='same'))
+    # Conv2 30 30 (32) => 28 28 (32)
+    model.add(Conv2D(32, (3, 3)))
     model.add(Activation('relu'))
+    # Pool1 28 28 (32) => 14 14 (32)
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
-    # Conv2 16 16 (64)
-    model.add(Conv2D(64, (3, 3), padding='same'))
+    # Conv3 14 14 (32) => 12 12 (64)
+    model.add(Conv2D(64, (3, 3)))
     model.add(Activation('relu'))
-    model.add(Conv2D(64, (3, 3), padding='same'))
+    # Conv4 12 12 (64) => 6 6 (64)
+    model.add(Conv2D(64, (3, 3)))
     model.add(Activation('relu'))
+    # Pool2 6 6 (64) => 3 3 (64)
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
-    # FC
+    # FC layers 3 3 (64) => 576
     model.add(Flatten())
-    model.add(Dense(512))
+    # Dense1 576 => 256
+    model.add(Dense(256))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
+    # Dense2 256 => 10
     model.add(Dense(num_classes))
     model.add(Activation('softmax'))
 

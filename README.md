@@ -1,13 +1,13 @@
 # Convolution neural networks made easy with keras
 By Wang Ming Rui
 
-I wrote this article after watching [Andrej Karpathy's lecture](https://www.youtube.com/watch?v=AQirPKrAyDg&t=3200s) on YouTube and realized how easy it actually is to implement a basic deep learning model. This article is really just a collection of things I find useful and interesting. Not everything is for everyone so feel free to skip through some of the parts that you feel is too draggy! Those of you who are coders might want to skip directly over to
+I wrote this article after watching [Andrej Karpathy's lecture](https://www.youtube.com/watch?v=AQirPKrAyDg&t=3200s) on YouTube and realized how easy it actually is to implement a basic deep learning model. This article is meant as a guide for people wishing to get into machine learning and deep learning models. Some will find the things covered here easier so feel free to speed through! If you do not consider yourself a highly-technical person, I try my best to keep things as simple as possible. Do remember to read every sentence and do multiple re-reads on parts that you do not fully understand to boost your understanding!
 
 ## Introduction
 Image recognition is the task of taking an image and labelling it. For us humans, this is one of the first skills we learn from the moment we are born and is one that comes naturally and effortlessly. By the time we reach adulthood we are able to immediately recognize patterns and put labels onto objects we see. These skills to quickly identify images, generalized from prior knowledge, are ones that we do not share with our machines.
 
 <p align="center"><img src="https://naushadsblog.files.wordpress.com/2014/01/pixel.gif", width="360"></p>
-<p align="center">Fig 0.0 how a machine 'views' a picture</p>
+<p align="center">Fig 0.0 how a machine 'views' an image</p>
 
 When a computer sees an image, it will see an array of pixel values, each between a range of 0 to 255. These values while meaningless to us are the only input available to a machine. No one knows how exactly we living beings process images but scientists today have figured out a technique to simulate this process, albeit at a basic level. We call this technique deep learning.
 
@@ -46,14 +46,14 @@ A typical input image will be broken down into it's individual pixel components.
 <p align="center"><img src="/imgs/filtering-math.JPG", width="720"></p>
 <p align="center">Fig 1.2 mathematics of filtering</p>
 
-A CNN would then take a small 3x3 pixel chunk from the original image and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original image and summing it up. A simplified example of how the math is done is as described in the picture above. (NOW STOP RIGHT HERE! Make sure you understand the mathematics of how to conduct filtering. We will talk about how we arrive at this filter later on.)
+A CNN would then take a small 3x3 pixel chunk from the original image and transform it into a single figure in a process called filtering. This is achieved by multiplying a number to each of the pixel of the original image and summing it up. A simplified example of how the math is done is as described in the picture above. NOW STOP RIGHT HERE! Make sure you understand the mathematics of how to conduct filtering. Re-read the contents if you need to. We will talk about how filters are made later on.
 
-Since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and summed up with another 3x3x3 filter. Then by adding another constant term, we are able to attain a single number result from this transformation.
+Since we are dealing with an image of depth 3 (number of colors), we need to imagine a 3x3x3 sized mini image being multiplied and summed up with another 3x3x3 filter. Then by adding another constant term, we will receive a single number result from this transformation.
 
 <p align="center"><img src="/imgs/filtering-many-to-one.gif", width="360"></p>
 <p align="center">Fig 1.3 filtering in action, original image is below</p>
 
-This same filter will then be applied to every single possible 3x3 pixel on the original image. And the end result would be a 2nd 'image' which would be of the size 30x30x1. Reason being, there are only 30x30 3x3 pixel squares on a 32x32 pixel image.
+This same filter will then be applied to every single possible 3x3 pixel on the original image. Notice that there are only 30x30 unique 3x3 squares on a 32x32 image, also remember that a filter will convert a 3x3 pixel image into a single image so the end result of applying a filter onto a 32x32x3 image will result in a 30x30x1 2nd 'image'.
 
 #### The high-level explanation
 
@@ -71,7 +71,13 @@ Armed with this knowledge, let us finish up the mechanics of the CNN.
 #### Back to mathematical part
 
 <!-- <explain filter stacking> -->
-One filter would only be capable of finding a single simplified feature so on the original image, multiple filters can be applied to identify as many features. Lets say on the original image, a total of 32 filters are applied and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image.
+One filter would only be capable of finding a single simplified feature on the original image. Multiple filters can be applied to identify multiple features. Lets say on the original image, a total of 32 filters are applied on the input 32x32x3 image, and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image. A step by step explanation of how to do this is as follows,
+
+1. generate a set of 32 filters of size 3x3x3 each
+2. take just a single filter and apply filter onto every single 3x3 chunk of the input image receive a 30x30x1 'image' in return.
+3. place the 30x30x1 'image' aside and move onto the next filter
+4. apply 2nd filter to input image and receive another 30x30x1 'image', stack this 'image' on top of the other 30x30x1 'image' to get a 30x30x2 'image'
+5. repeat until all 32 filters are used.
 
 The entire process of transforming an input from a 32x32x3 form to a 30x30x32 form is known as a single convolution layer. An entire CNN model is usually made up of multiple convolution layers and a classifier layer. Here is an example of how a typical CNN would look like.
 
