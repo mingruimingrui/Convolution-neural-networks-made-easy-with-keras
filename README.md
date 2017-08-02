@@ -107,7 +107,7 @@ Do keep in mind, this is just a very basic understanding of what the fully conne
 
 ### Where filter weights come from
 
-> Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into a simple term that it could, either a feature is present or it is not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains.
+> Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into simple terms that it could, these terms represents weather a high level feature is present or not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains.
 
 CNN is an algorithm that require some very specific parameters (we also call them weights) in the filter layers else the entire model would fail to function. We find these parameters using Mathematics.
 
@@ -186,7 +186,7 @@ Let us first plot a simple graph.
 
 <!-- image here -->
 
-Imagine this, you have a horizontal axis. This axis is composed of all the different unique parameters, _A_, all mapped out onto a line. Each point on this axis represents a unique _A_.
+Imagine this, you have a horizontal axis. This axis is composed of all the unique combination of parameters, _A_, all mapped out onto a line. Each point on this axis represents a unique _A_.
 
 The vertical axis represents the average error at that specific _A_ (the cost in terms of model inaccuracy therefore the name cost function). As one can expect, the average error will not be a linear function, rather it will be curved, like in the image above.
 
