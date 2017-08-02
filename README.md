@@ -101,15 +101,15 @@ The act of repeating the process of CONV RELU POOL would simulate the process of
 <p align="center"><img src="/imgs/fully-connected-layer.JPG", width="540"></p>
 <p align="center">Fig 1.7 A simple fully connected layer displaying probability outputs</p>
 
-The fully connected layer, will take in all of the features produced from the prior convolution layers and output the probability of the image being of each particular label. Remember that the purpose of the convolution layers are to output the presence of advanced features such as eyes, mouth, or wings. By taking note of the presence of such features, the fully connected layer will do the last bit of detective work to determine the most suitable label to apply to each image. Mathematically, it works in the same way as filters do except this time, there's no 3x3 portions. Each 'filter' in this case will be the same size as the output layer from the final layer of convolution. There can however be multiple 'filters' but just as many as the number of label classes you have, the intuition being that you can calculate the confidence level of each individual class separately.
+The fully connected layer, will take in all of the advanced features produced by the final convolution layer and output the probability for each label. Remember that the purpose of the convolution layers are to output the presence of advanced features such as eyes, mouth, or wings. By taking note of the presence of such features, the fully connected layer will do the last bit of detective work to determine the most suitable label to apply to each image. Mathematically, it works in the same way as filters do except this time, there's no 3x3 portions. Each 'filter' in this case will be the same size as the output layer from the final layer of convolution. There can however be multiple fully-connected-layers but only just as many as the number of label classes you have, the intuition being that you can calculate the confidence level of each individual class separately.
 
-Do keep in mind, this is just a very basic understanding of what the fully connected layer does. In actuality this layer can be much more complex but first, a much long awaited question should be answered.
+Do keep in mind, this is just a very basic understanding of what the fully connected layer seeks to accomplish. In actuality this layer can be much more complex but first, a much long awaited question should be answered.
 
 ### Where filter weights come from
 
 > Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into a simple term that it could, either a feature is present or it is not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains.
 
-CNN is an algorithm that requires some very specific parameters (we also call them weights) in the filter layers else the entire model would fail to function. Some of you might not be comfortable to hear this but do not be alarmed! To solve this problem we will have to make use of Mathematics.
+CNN is an algorithm that require some very specific parameters (we also call them weights) in the filter layers else the entire model would fail to function. We find these parameters using Mathematics.
 
 The problem is this,
 
@@ -126,17 +126,27 @@ To translate this into mathematics, let us first define a few terms,
 
   <dt><img src="/imgs/y-hat.JPG", width="30"></dt>
   <dd>Represents the predicted label of the image</dd>
+
+  <dt><img src="/imgs/y-hat.JPG", width="30"></dt>
+  <dd>Represents the \`series of multiplications, summations and modifications\` the CNN makes on the the image to output you predicted value</dd>
+
+  <dt><img src="/imgs/y-hat2.JPG", width="80"></dt>
+  <dd></dd>
 </dl>
+
+Taking note of these definitions, we can also define our predicted y as follows,
+
+> <p><img src="/imgs/y-hat2.JPG", width="80"></p>
 
 When you take the predicted result and subtract it from our actual result, you get this back,
 
 > <p><img src="/imgs/residual.JPG", width="80"></p>
 
-One way of interpreting this is by viewing it as a measure of how far off the model is from the desired result (also called the error). An error of 0 would mean that the model is spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, you will be able to get a gauge of how well a set of parameters are doing. The greater the average error, the more inaccurate the predictions are, which prompts you to change the current set of parameters.
+One way of interpreting this is by viewing it as a measure of how far off the model is from the desired result (this measure is hereby called error). An error of 0 would mean that the model is spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, you will be able to get a gauge of how well a set of parameters are doing. The greater the average error, the more inaccurate the predictions are, which prompts you to change the current set of parameters.
 
-<p>Lets take the example of the case were we have 3 images, the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.jpg", width="40"></p>
+<p>Lets take the example of the case were we have 3 images. Suppose the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.jpg", width="40"></p>
 
-That does not mean that the predictions the CNN made are all correct. The error lies in the way error is accumulated as there are both positive and negative errors and they will cancel each other out. A simple modification will fix this, by squaring the errors you will force all errors to be positive.
+That does not mean that the predictions the CNN made are all correct. The problem lies in the method error is accumulated. As there are both positive and negative errors, they will cancel each other out but thankfully simple modification will fix this. By squaring the errors you will force all errors to be positive.
 
 > <p><img src="/imgs/summation-symbol.JPG", width="30">, this symbol just means summation. In the context below, it means for all images, sum up (the term inside)</p>
 
@@ -152,15 +162,11 @@ and of course to account for averaging,
 
 > <p><img src="/imgs/average-squared-error.JPG", width="100"></p>
 
-So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3. The more we attempt to minimize this equation, the closer we are to the optimal set of parameters. Minimization also has a symbol for convenience.
+So errors of 0, 1, and -1 will sum up to be (0^2) + (1^2) + ((-1)^2) = 0 + 1 + 1 = 2. Averaging that out will give us 2/3. The smaller this figure is, the closer we are to the optimal set of parameters. Therefore minimizing this term would be the same as finding the optimal parameters for the CNN. Minimization also has a symbol for convenience.
 
 > <p><img src="/imgs/cost-function.JPG", width="120"></p>
 
-For clarity sake, lets replace our predicted y in place of another variable.
-
-> <p><img src="/imgs/y-hat2.JPG", width="80"></p>
-
-Where A is simply represents the series of transformation we apply onto x (our original image) to arrive at the prediction of the label of x. We can then put that into the equation we are attempting to minimize.
+Then lets replace our predicted y.
 
 > <p><img src="/imgs/cost-function2.JPG", width="120"></p>
 
@@ -172,7 +178,7 @@ The question of how we arrive at the optimal filter is still unanswered but to s
 
 > <p><img src="/imgs/cost-function2.JPG", width="120"> (also known as the cost function)</p>
 
-there is an area of Mathematics dedicated to solving this easily called gradient descent.
+there is an area of Mathematics dedicated to solving problems such as this called gradient descent.
 
 ### Gradient descent
 
