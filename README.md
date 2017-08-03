@@ -228,7 +228,7 @@ By now you should have understood that CNN is a model made out of individual lay
 - model Building
 - training
 
-This section will mainly be for python coders since the library we are using, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
+This section will mainly be for python coders since the library that will be used, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
 
 To run the model covered in this section, simple do the following,
 
@@ -237,17 +237,69 @@ To run the model covered in this section, simple do the following,
 3. ```python basic_model.py```
 
 ### Depenencies
-You will need the following software installed on your local device (alternatively do it on a cloud based server)
+You will need the following software installed on your device of choice:
+- Python 2/3 (I'm using Python 3.6)
+- Numpy (for matrix manipulations and linear algebra)
+- pathlib
+- Matplotlib (optional)
+
+Do also make sure that the dependencies you installed are suitable for the version of python you are working on. Matplotlib will only be used only later during model visualization.
 
 ### Dataset
-The training set we will be using is the CIFAR-10 dataset. It is a collection of 60,000 32x32 pixel labelled images (meaning that each image is already labelled according what it is an image of). Loading the dataset is just the matter of 2 lines of codes.
+The training set you will be using is the CIFAR-10 dataset. It is a collection of 60,000 32x32 pixel labelled images (meaning that each image is already labelled according what it is an image of). Loading the dataset is just the matter of 3 lines of codes (or 1 if you don't count importing).
 
 ```python
+import numpy as np
 from keras.datasets import cifar10
+
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 ```
 
-Now you might have noticed that we have loaded this thing called X_train and y_train. The X here simply means the collection of images and y is the collection of labels. There are also X_train and X_test. We call these Training set and test set. We will build our model out of the training set and test it's results on the test set. The reason why we wish to do thing this way is because we wish to ensure that our algorithm works is capable of generalizing.
+Now you might have noticed that we have loaded this thing called ```X_train``` and ```y_train```. The X here simply means the collection of images and y is the collection of labels.
+
+There are also ```X_train``` and ```X_test```. We call these training set and test set. We will build our model on the training set and test it's results on the test set. The reason why we wish to do thing this way is because we wish to ensure that our algorithm is capable of generalizing onto external data. It is possible to have a model which performs perfectly on a local dataset but fail completely on any outside datasets. We call this the case of overfitting.
+
+Let us first visualize how data is stored in X_train,
+
+```python
+print(type(X_train))
+>>> <class 'numpy.ndarray'>
+
+print(X_train.shape)
+>>> (50000, 32, 32, 3)
+```
+
+X_train is stored in a format known as a matrix in python, the Numpy library is a library for creating and manipulating matrix objects and a ```numpy.ndarray``` is the default matrix class. A matrix is relatively easy to understand. In the context of the example above, ```X_train``` can be viewed as a multi dimensional array. We know that the dataset is a collection of 32x32x3 images so ```X_train``` can be interpreted in the following format ```(image_index, height_index, width_index, rgb_index)```.
+
+We can easily access individual images this way,
+
+```python
+img1 = X_train[0,:,:,:]
+print(img1.shape)
+>>> (32, 32, 3)
+
+img1_reds = X_train[0,:,:,0]
+print(img1_reds.shape)
+>>> (32, 32)
+```
+
+We can also plot out the images using Matplotlib,
+
+```python
+from matplotlib.pyplot import plt
+
+plt.imshow(img1)
+plt.show()
+
+img1_again = X_train[0]
+plt.imshow(img1_again)
+plt.show()
+```
+
+<p align="center"><img src="/imgs/frog.jpg", width="320"></p>
+<p align="center">Fig 2.0 the image of the frog can clearly be seen plotted out</p>
+
+
 
 ## Visualizing your CNN
 - activation based
