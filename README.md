@@ -22,10 +22,9 @@ The goal of this article is to allow anyone with coding abilities to create thei
 
 ## Contents
 1. [Convolution neural networks, how it functions](#convolution-neural-networks-how-it-functions)
-<!-- 2. [Keras, deep learning simplified](#keras-deep-learning-simplified) -->
-3. [Building your first model](#building-your-first-model)
-4. [Visualizing your CNN](#visualizing-your-cnn)
-5. [Improving your model](#improving-your-model)
+2. [Building your first model](#building-your-first-model)
+3. [Visualizing your CNN](#visualizing-your-cnn)
+4. [Improving your model](#improving-your-model)
 
 ## Convolution neural networks, how it functions
 
