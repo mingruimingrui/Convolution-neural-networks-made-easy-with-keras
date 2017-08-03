@@ -241,7 +241,12 @@ To run the model covered in this section, simple do the following,
 You will need the following software installed on your local device (alternatively do it on a cloud based server)
 
 ### Dataset
-The training set we will be using is the CIFAR-10 dataset. It is a collection of 60,000 labelled images (meaning that each image has tag attached to it saying what it is an image of). Loading the dataset is just the matter of 2 lines of code.
+The training set we will be using is the CIFAR-10 dataset. It is a collection of 60,000 labelled images (meaning that each image is already labelled according what it is an image of). Loading the dataset is just the matter of 2 lines of codes.
+
+```
+from keras.datasets import cifar10
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+```
 
 
 
