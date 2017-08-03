@@ -21,10 +21,10 @@ Though not necessary, some recommended prerequisites to this guide are:
 The goal of this article is to allow anyone with coding abilities to create their own starter deep learning model.
 
 ## Contents
-1. [Convolution neural networks, how it functions](#convolution-neural-networks-the-game-changer)
-2. [Keras, deep learning simplified](#keras-deep-learning-simplified)
-3. [Building your first models](#building-your-first-models)
-4. [Visualizing your CNN](#visualizing-your-CNN)
+1. [Convolution neural networks, how it functions](#convolution-neural-networks-how-it-functions)
+<!-- 2. [Keras, deep learning simplified](#keras-deep-learning-simplified) -->
+3. [Building your first model](#building-your-first-model)
+4. [Visualizing your CNN](#visualizing-your-cnn)
 5. [Improving your model](#improving-your-model)
 
 ## Convolution neural networks, how it functions
@@ -200,7 +200,7 @@ Recall that minimizing this average error will result in a more accurate model. 
 
 Those of you familiar with calculus should be able to recognize that solving this problem involves finding differential functions. But those who aren't don't have to worry too much as most deep learning libraries these days are capable of doing these math for you. Learning the math is tedious especially for people without prior mathematical knowledge however it is still useful and fundamental when building more complex algorithms and models. By the way, the full cost function (average error) would also contain a regularization term. [external materials TBI]
 
-One thing of note is that we do not specify the objectives for each filter. That is because the filters usually adjust themselves to identify complex features. This isn't exactly surprising from a statistical standpoint. Eyes, nose, and mouth are usually very good indicators in face identification. Models are usually good exactly because they are capable of internalizing such complex features.
+One thing of note is that we do not specify the objectives for each filter. That is because the filters usually adjust themselves to identify complex features. This isn't exactly surprising from a statistical standpoint. Eyes, nose, and mouth are usually very good indicators in face identification. Models are considered good if they are able to identify complex features.
 
 <!-- ### Brief history
 STASHED kept for reuse later
@@ -223,7 +223,7 @@ This section is going to be mainly for python coders since the library we will b
 ### Sequential Models
 By now you should have understood that CNN is a model made out of individual layers -->
 
-## Building your first models
+## Building your first model
 - dataset
 - preprocessing
 - model Building
@@ -241,15 +241,14 @@ To run the model covered in this section, simple do the following,
 You will need the following software installed on your local device (alternatively do it on a cloud based server)
 
 ### Dataset
-The training set we will be using is the CIFAR-10 dataset. It is a collection of 60,000 labelled images (meaning that each image is already labelled according what it is an image of). Loading the dataset is just the matter of 2 lines of codes.
+The training set we will be using is the CIFAR-10 dataset. It is a collection of 60,000 32x32 pixel labelled images (meaning that each image is already labelled according what it is an image of). Loading the dataset is just the matter of 2 lines of codes.
 
-```
+```python
 from keras.datasets import cifar10
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 ```
 
-
-
+Now you might have noticed that we have loaded this thing called X_train and y_train. The X here simply means the collection of images and y is the collection of labels. There are also X_train and X_test. We call these Training set and test set. We will build our model out of the training set and test it's results on the test set. The reason why we wish to do thing this way is because we wish to ensure that our algorithm works is capable of generalizing.
 
 ## Visualizing your CNN
 - activation based
