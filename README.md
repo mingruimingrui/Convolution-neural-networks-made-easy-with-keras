@@ -184,13 +184,13 @@ there is an area of Mathematics dedicated to solving problems such as this calle
 
 Let us first plot a simple graph.
 
-<!-- image here -->
+<p><img src="/imgs/graph1.jpg", width="320"></p>
 
 Imagine this, you have a horizontal axis. This axis is composed of all the unique combination of parameters, _A_, all mapped out onto a line. Each point on this axis represents a unique _A_.
 
 The vertical axis represents the average error at that specific _A_ (the cost in terms of model inaccuracy therefore the name cost function). As one can expect, the average error will not be a linear function, rather it will be curved, like in the image above.
 
-<!-- image here -->
+<p><img src="/imgs/graph2.jpg", width="320"></p>
 
 Recall that minimizing this average error will result in a more accurate model. Therefore, the point where the curve dips lowest corresponds to the set of parameters which allows the model to perform best. The problem of finding this point is called gradient descent. Sadly there is no simple way to explain how the process of gradient descent work without watering it down too much. In summary it goes a little something like this,
 
