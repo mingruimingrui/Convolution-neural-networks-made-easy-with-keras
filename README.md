@@ -143,7 +143,8 @@ When you take the predicted result and subtract it from our actual result, you g
 
 One way of interpreting this is by viewing it as a measure of how far off the model is from the desired result (this measure is hereby called error). An error of 0 would mean that the model is spot on, 1 and -1 would mean that there are still improvements to be made. By averaging up the errors a CNN's predictions make on a set of images, you will be able to get a gauge of how well a set of parameters are doing. The greater the average error, the more inaccurate the predictions are, which prompts you to change the current set of parameters.
 
-<p>Lets take the example of the case were we have 3 images. Suppose the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0. <img src="/imgs/you-dont-say.jpg", width="40"></p>
+<p>Lets take the example of the case were we have 3 images. Suppose the errors of an algorithm trying to predict the actual labels of these images are 0, 1, and -1. If we sum up all these errors we should get the total error so 0 + 1 + (-1) = ... 0? Even if we average it out it would still be 0.
+<!-- <img src="/imgs/you-dont-say.jpg", width="40"></p> -->
 
 That does not mean that the predictions the CNN made are all correct. The problem lies in the method error is accumulated. As there are both positive and negative errors, they will cancel each other out but thankfully simple modification will fix this. By squaring the errors you will force all errors to be positive.
 
@@ -243,10 +244,10 @@ You will need the following software installed on your device of choice:
 - pathlib
 - Matplotlib (optional)
 
-Do also make sure that the dependencies you installed are suitable for the version of python you are working on. Matplotlib will only be used only later during model visualization.
+Do also make sure that the dependencies you installed are suitable for the version of python you are working on.
 
 ### Dataset
-The training set you will be using is the CIFAR-10 dataset. It is a collection of 60,000 32x32 pixel labelled images (meaning that each image is already labelled according what it is an image of). Loading the dataset is just the matter of 3 lines of codes (or 1 if you don't count importing).
+The training set you will be using is the CIFAR-10 dataset. It is a collection of 60,000 32x32 pixel images labelled to one of 10 different classes. Loading the dataset is just the matter of 3 lines of codes (or 1 if you don't count importing).
 
 ```python
 import numpy as np
@@ -259,28 +260,29 @@ Now you might have noticed that we have loaded this thing called ```X_train``` a
 
 There are also ```X_train``` and ```X_test```. We call these training set and test set. We will build our model on the training set and test it's results on the test set. The reason why we wish to do thing this way is because we wish to ensure that our algorithm is capable of generalizing onto external data. It is possible to have a model which performs perfectly on a local dataset but fail completely on any outside datasets. We call this the case of overfitting.
 
-Let us first visualize how data is stored in X_train,
+Let us first visualize how data is stored in ```X_train```,
 
 ```python
 print(type(X_train))
 >>> <class 'numpy.ndarray'>
 
-print(X_train.shape)
+print(X_train.shape) # method to identify shape(size) of numpy.ndarray also known as a matrix
 >>> (50000, 32, 32, 3)
 ```
 
-X_train is stored in a format known as a matrix in python, the Numpy library is a library for creating and manipulating matrix objects and a ```numpy.ndarray``` is the default matrix class. A matrix is relatively easy to understand. In the context of the example above, ```X_train``` can be viewed as a multi dimensional array. We know that the dataset is a collection of 32x32x3 images so ```X_train``` can be interpreted in the following format ```(image_index, height_index, width_index, rgb_index)```.
+X data is stored in a format known as a matrix in python, the Numpy library is a library for creating and manipulating matrix objects and a ```numpy.ndarray``` is the default matrix class. A matrix is relatively easy to understand. In the context of the example above, ```X_train``` can be viewed as a multi dimensional array. We know that the dataset is a collection of 32x32x3 images so ```X_train``` can be interpreted in the following format ```(image_index, height_index, width_index, rgb_index)```. In other words, there are 50,000 images in ```X_train```.
+
 
 We can easily access individual images this way,
 
 ```python
-img1 = X_train[0,:,:,:]
+img1 = X_train[0, :, :, :] # : operator just means select all
 print(img1.shape)
 >>> (32, 32, 3)
 
-img1_reds = X_train[0,:,:,0]
-print(img1_reds.shape)
->>> (32, 32)
+img_exp = X_train[0:30, :, :, :] # selection of multiple images can be easily done this way
+print(img_exp.shape)
+>>> (30, 32, 32, 3)
 ```
 
 We can also plot out the images using Matplotlib,
@@ -291,15 +293,101 @@ from matplotlib.pyplot import plt
 plt.imshow(img1)
 plt.show()
 
-img1_again = X_train[0]
+img1_again = X_train[0] # another way of selecting images
 plt.imshow(img1_again)
 plt.show()
 ```
 
 <p align="center"><img src="/imgs/frog.jpg", width="320"></p>
-<p align="center">Fig 2.0 the image of the frog can clearly be seen plotted out</p>
+<p align="center">Fig 2.0 the image of the frog can be seen plotted out</p>
 
+y data is also stored in a matrix,
 
+```python
+print(y_train.shape)
+>>> (50000, 1)
+
+print(y_train[:5]) # here we look at the first 5 elements of y_train
+>>> array([[6],
+           [9],
+           [9],
+           [4],
+           [1]], dtype=uint8)
+
+print(y_train.min(), y_train.max())
+>>> 0 9
+```
+
+As we expect, there are as many labels in ```y_train``` as images in ```X_train``` (50,000). Labels are integers range from 0 to 9 corresponding to the classes they represent. Here's a dictionary of what each integer represents.
+
+```python
+labels = {
+	0: 'airplane',
+  1: 'automobile',
+  2: 'bird',
+  3: 'cat',
+  4: 'deer',
+  5: 'dog',
+  6: 'frog',
+  7: 'horse',
+  8: 'ship',
+  9: 'truck'
+} # remember img1 has label of 6, that corresponds to a frog
+```
+
+Lastly lets check the size of our test set, I did mention above that CIFAR-10 has 60,000 labelled images and the training set has 50,000 images. So just to be sure...
+
+```python
+print(X_train.shape)
+>>> (10000, 32, 32, 3)
+
+print(y_train.shape)
+>>> (10000, 1)
+```
+
+Perfect lets move on.
+
+### Preprocessing
+Preprocessing is important step in building machine learning algorithms. There are things that you can do on both your X and y. Here we will explore 2 preprocessing techniques, mean-normalization and binary encoding.
+
+#### Mean-normalization
+Image pixel values are usually of the datatype ```uint8``` which means an integer between the range of 0 to 255. If we make use of such large numbers in our models, there can be possibility of overflow (what happens when numbers get too big and the machine fails to compute correctly). To reduce possibility of overflow, we scale our original values down to a decimal between 0 and 1. Doing so is easy, we just have to divide every term by 255, the highest possible value.
+
+```python
+dtype_mult = 255.0
+X_train = X_train.astype('float32') / dtype_mult
+```
+
+> There are actually many ways to do mean-normalization. Some scale to a range between -1 and 1. while others ensure that distribution is akin to a normal distribution of mean 0 and std 1. In other datasets where values can be of differing ranges, normalization is also done so that we will be able to select a suitable learning rate for gradient descent!
+
+#### Binary encoding
+We want to be able to generate a probability index of how likely an image is to belong to each different class. Therefore we make a separate prediction for each class. To do that we also have to do a modification to our y as demonstrated below!
+
+```python
+import keras
+
+num_classes = 10
+y_train = keras.utils.to_categorical(y_train, num_classes)
+
+print(y_train.shape)
+>>> (50000, 10)
+
+print(y_train[:5])
+>>> array([[ 0.,  0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.,  0.],
+           [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  1.],
+           [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  1.],
+           [ 0.,  0.,  0.,  0.,  1.,  0.,  0.,  0.,  0.,  0.],
+           [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])
+```
+
+As you can see, we basically transformed y_train into a binary code of is or is not. ```img1``` which is labelled as a frog has an original label value of 6. From the single value of 6 it has transformed into an array of 10 digits, 0s everywhere except for the 6th place which has a value of 1. It just means that it is not a airplane, not a automobile ... but is a frog.
+
+### Model building
+Now is time to define the model. before we declare the model, lets set out a clearly defined structure for our model before actually coding things out. We shall refer to the terminologies as defined in the [explanation of CNNs](#back-to-the-model)
+
+#### Layer number
+1. Convolution 3x3
+2. RELU
 
 ## Visualizing your CNN
 - activation based

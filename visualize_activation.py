@@ -14,7 +14,18 @@ num_classes = 10
 X_shape = (-1,32,32,3)
 layer_depths = [2,4,8,10]
 
-labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+labels = {
+	0: 'airplane',
+    1: 'automobile',
+    2: 'bird',
+    3: 'cat',
+    4: 'deer',
+    5: 'dog',
+    6: 'frog',
+    7: 'horse',
+    8: 'ship',
+    9: 'truck'
+}
 
 def get_dataset():
     sys.stdout.write('Loading Dataset\n\n')
