@@ -12,7 +12,7 @@ weight_path = './models/stashed/convnet_weights.h5'
 dtype_mult = 255
 num_classes = 10
 X_shape = (-1,32,32,3)
-layer_depths = ['conv2d_1','conv2d_2','conv2d_3','conv2d_4','conv2d_5','conv2d_6']
+layer_depths = ['conv2d_1','conv2d_2','conv2d_3','conv2d_4']
 
 labels = {
     0: 'airplane',
@@ -63,20 +63,20 @@ def remove_till_layer(model, layer_name):
 def get_random_img(X, y):
     i = np.random.randint(0, len(X))
     img = X[i].reshape(X_shape)
-    label = labels[y[i].argmax()]
+    label_id = y[i].argmax()
 
-    return img, label
+    return img, label_id
 
 def get_random_correct_img(X, y, model):
     found = False
 
     while found == False:
-        img, label = get_random_img(X, y)
+        img, label_id = get_random_img(X, y)
         pred = model.predict(img)[0]
-        if pred.argmax() == y[i].argmax()):
+        if pred.argmax() == y[label_id].argmax():
             found = True
 
-    return img, label
+    return img, label_id
 
 def generate_conv_layer_models():
     sys.stdout.write('Generating layer models\n\n')
@@ -110,10 +110,10 @@ def gen_models_and_visualize(X, y, n_imgs=3):
     conv_models = generate_conv_layer_models()
 
     for i in range(n_imgs):
-        img, title = get_random_correct_img(X, y, full_model)
+        img, label_id = get_random_correct_img(X, y, full_model)
 
         _ = plt.imshow(img.reshape(img.shape[1:]))
-        _ = plt.title(title)
+        _ = plt.title(labels[label_id])
 
         index = 0
         for model in conv_models:

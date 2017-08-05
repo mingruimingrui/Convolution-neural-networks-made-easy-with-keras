@@ -57,24 +57,26 @@ def load_model():
 def get_random_img(X, y):
     i = np.random.randint(0, len(X))
     img = X[i].reshape(X_shape)
-    label = labels[y[i].argmax()]
+    label_id = y[i].argmax()
 
-    return img, label
+    return img, label_id
 
 def get_random_correct_img(X, y, model):
     found = False
 
     while found == False:
-        img, label = get_random_img(X, y)
+        img, label_id = get_random_img(X, y)
         pred = model.predict(img)[0]
-        if pred.argmax() == y[i].argmax()):
+        if pred.argmax() == y[label_id].argmax():
             found = True
 
-    return img, label
+    return img, label_id
 
 def visualize(X, y, model, n_imgs=3):
     for i in range(n_imgs):
-        img = get_random_correct_img()
+        img = get_random_correct_img(X, y, model)
+        _ = plt.imshow(img)
+        _ = plt.show()
 
 
 

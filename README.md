@@ -24,19 +24,14 @@ The goal of this article is to allow anyone with coding abilities to create thei
 
 ## Contents
 1. [Convolution neural networks, how it functions](#convolution-neural-networks)
-  * [CNNs explained](#cnns-explained)
-  * [Where filter weights come from](#where-filter-weights-come-from)
-
 2. [Building your first model](#building-your-first-model)
-  * [Dataset](#dataset)
-  * [Preprocessing](#preprocessing)
-  * [Model building](#model-building)
-  * [Model training](#model-training)
-
 3. [Visualizing your CNN](#visualizing-your-cnn)
 4. [Improving your model](#improving-your-model)
 
 ## Convolution neural networks
+
+* [CNNs explained](#cnns-explained)
+* [Where filter weights come from](#where-filter-weights-come-from)
 
 Image recognition used to be done using much simpler methods such as linear regression and comparison of similarities. The results were obviously not very good, even the simple task of recognizing hand-written alphabets proved difficult. Convolution neural networks (CNNs) are supposed to be a step up from what we traditionally do by offering a computationally cheap method of effectively simulating the neural activities of a human brain when it perceives images.
 
@@ -242,6 +237,12 @@ This section is going to be mainly for python coders since the library we will b
 By now you should have understood that CNN is a model made out of individual layers -->
 
 ## Building your first model
+
+* [Dataset](#dataset)
+* [Preprocessing](#preprocessing)
+* [Model building](#model-building)
+* [Model training](#model-training)
+
 This section will mainly be for python coders since the library that will be used, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
 
 To run the model covered in this section, simple do the following,
@@ -252,7 +253,7 @@ To run the model covered in this section, simple do the following,
 
 #### Dependencies
 You will need the following software installed on your device of choice:
-- Python 2/3 (I'm using Python 3.6)
+- Python 2/3 (I'm using Python 3.5)
 - Numpy (for matrix manipulations and linear algebra)
 - pathlib
 - Matplotlib (optional)
