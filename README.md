@@ -24,8 +24,15 @@ The goal of this article is to allow anyone with coding abilities to create thei
 
 ## Contents
 1. [Convolution neural networks, how it functions](#convolution-neural-networks)
-  - [CNNs explained](#cnns-explained)
+  * [CNNs explained](#cnns-explained)
+  * [Where filter weights come from](#where-filter-weights-come-from)
+
 2. [Building your first model](#building-your-first-model)
+  * [Dataset](#dataset)
+  * [Preprocessing](#preprocessing)
+  * [Model building](#model-building)
+  * [Model training](#model-training)
+
 3. [Visualizing your CNN](#visualizing-your-cnn)
 4. [Improving your model](#improving-your-model)
 
@@ -115,6 +122,8 @@ Do keep in mind, this is just a very basic understanding of what the fully conne
 
 ### Where filter weights come from
 
+#### The objective statement
+
 > Short recap: Up to this current moment in time, your understanding of how CNNs work is that through a series of multiplications, summations and modifications, you are able to generate a prediction of some sort. Along the way, complex features that a computer would not normally be able to identify are extracted and turned into simple terms that it could, these terms represents weather a high level feature is present or not. This greatly simplifies the original problem of image identification into small simple steps that a computer can solve but there's just one mystery remains.
 
 CNN is an algorithm that require some very specific parameters (we also call them weights) in the filter layers else the entire model would fail to function. We find these parameters using Mathematics.
@@ -189,7 +198,7 @@ The question of how we arrive at the optimal filter is still unanswered but to s
 
 there is an area of Mathematics dedicated to solving problems such as this called gradient descent.
 
-### Gradient descent
+#### Gradient descent
 
 Let us first plot a simple graph.
 
@@ -241,7 +250,7 @@ To run the model covered in this section, simple do the following,
 2. ```cd Convolution-neural-networks-made-easy-with-keras```
 3. ```python basic_model.py```
 
-### Depenencies
+#### Dependencies
 You will need the following software installed on your device of choice:
 - Python 2/3 (I'm using Python 3.6)
 - Numpy (for matrix manipulations and linear algebra)
