@@ -12,10 +12,10 @@ weight_path = './models/stashed/convnet_weights.h5'
 dtype_mult = 255
 num_classes = 10
 X_shape = (-1,32,32,3)
-layer_depths = [2,4,8,10]
+layer_depths = ['conv2d_1','conv2d_2','conv2d_3','conv2d_4','conv2d_5','conv2d_6']
 
 labels = {
-	0: 'airplane',
+    0: 'airplane',
     1: 'automobile',
     2: 'bird',
     3: 'cat',
@@ -42,8 +42,8 @@ def get_dataset():
 
 def load_model():
     if (Path('./models/convnet_improved_model.json').is_file() == False) | (Path('./models/convnet_improved_model.json').is_file() == False):
-        sys.std.write('Please train model using basic_model.py first')
-        sys.std.flush()
+        sys.stdout.write('Please train model using basic_model.py first')
+        sys.stdout.flush()
         raise SystemExit
 
     with open(model_path) as file:
@@ -54,31 +54,37 @@ def load_model():
 
     return model
 
-def remove_till_layer(model, layer):
-    while len(model.layers) > layer:
+def remove_till_layer(model, layer_name):
+    while model.layers[len(model.layers)-1].name != layer_name:
         model.pop()
 
     return model
 
-def get_random_predicted_img(X, y, model):
+def get_random_img(X, y):
+    i = np.random.randint(0, len(X))
+    img = X[i].reshape(X_shape)
+    label = labels[y[i].argmax()]
+
+    return img, label
+
+def get_random_correct_img(X, y, model):
     found = False
 
     while found == False:
-        i = np.random.randint(0, len(X))
-        img = X[i].reshape(X_shape)
+        img, label = get_random_img(X, y)
         pred = model.predict(img)[0]
-        if pred.argmax() == y[i].argmax():
+        if pred.argmax() == y[i].argmax()):
             found = True
 
-    return img, labels[pred.argmax()]
+    return img, label
 
 def generate_conv_layer_models():
     sys.stdout.write('Generating layer models\n\n')
     sys.stdout.flush()
     conv_models = []
 
-    for i in layer_depths:
-        conv_models.append(remove_till_layer(load_model(), i))
+    for layer_name in layer_depths:
+        conv_models.append(remove_till_layer(load_model(), layer_name))
 
     return conv_models
 
@@ -89,7 +95,7 @@ def plot_hidden_layers(model, img, title=None):
     _ = plt.figure()
     # some how this isn't showing up
     if title:
-        _ = plt.title(title)
+        _ = plt.suptitle(title)
     sub_plot_height = math.ceil(np.sqrt(to_visual.shape[2]))
     for i in range(to_visual.shape[2]):
         ax = plt.subplot(sub_plot_height, sub_plot_height, i+1)
@@ -99,12 +105,12 @@ def plot_hidden_layers(model, img, title=None):
         _ = ax.set_aspect('equal')
         _ = plt.imshow(to_visual[:, :, i])
 
-def visualize(X, y, n_imgs=3):
+def gen_models_and_visualize(X, y, n_imgs=3):
     full_model = load_model()
     conv_models = generate_conv_layer_models()
 
     for i in range(n_imgs):
-        img, title = get_random_predicted_img(X, y, full_model)
+        img, title = get_random_correct_img(X, y, full_model)
 
         _ = plt.imshow(img.reshape(img.shape[1:]))
         _ = plt.title(title)
@@ -112,13 +118,13 @@ def visualize(X, y, n_imgs=3):
         index = 0
         for model in conv_models:
             index += 1
-            plot_hidden_layers(model, img, 'conv layer {}'.format(i))
+            plot_hidden_layers(model, img, 'conv layer {}'.format(index))
 
         plt.show()
 
 def main():
-    X, y, _, _ = get_dataset()
-    visualize(X, y)
+    _, _, X, y = get_dataset()
+    gen_models_and_visualize(X, y)
 
 if __name__ == "__main__":
     # execute only if run as a script

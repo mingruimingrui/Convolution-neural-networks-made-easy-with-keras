@@ -13,6 +13,8 @@ When a computer sees an image, it will see an array of pixel values, each betwee
 
 There are many good resources out there that teaches you how to build your very own deep learning model. In this guide, we shall focus on one of these models. It is perhaps one of the most revolutionary and fundamental model in recent times, a convolution neural network (or CNN for short).
 
+> Along the way, there are some sections listed this way. These are extra materials which will just be a little harder to understand but are there for completion sake. Feel free to skip over and review later if you are having difficulty understanding them at the point of time.
+
 ## Before we get started
 Though not necessary, some recommended prerequisites to this guide are:
 - [python programming skills](https://learnpythonthehardway.org/)
@@ -86,12 +88,18 @@ The model would take an input from the left (here the image of a car). And the d
 
 - CONV: In the model in the picture, the first layer is a CONV layer. It is nothing new as CONV is just short form for convolution layer.
 
+> There are of course convolution layers of different sizes and not just 3x3. Some models uses 7x7 and even 11x11 filters but larger filters also mean more parameters which means longer training time. Filters are also usually has odd lengths and are squares. This is so as to have some sort of center to take reference from. There is also another concept called strides. In the examples above we use strides of size 1. Stride 2 would mean starting from the top left most 3x3 section of the imag, you move 2 pixels to the right before you apply your filter again, the same when you move downwards.
+
 - RELU: The RELU layer (short for rectifier layer) is basically a transformation of all negative outputs of the previous layer into 0. As negative numbers would also contribute to the output of the next layer, 0 has a significance in the sense that it will not affect the results of the next layer. Looking back at the high-level definition of how a convolution works, negative numbers should mean the absence of a feature. 0 would fit that idea more concisely and that is the purpose of this layer. We will not change the values of the positive numbers as the magnitude of the positive number can help identify how closely the image represents a feature. The RELU layer will not transform the shape of it's input. If the input is of shape 30x30x32, the output would still be 30x30x32, except all the negatives are now 0s instead.
+
+> In actual fact rectifiers are just a member of a larger family called activators, they all set out to achieve the same purpose as stated above. Another popular activation layer is the logistic activator, It transform it's inputs into a logistic distribution.
 
 <p align="center"><img src="/imgs/max-pooling.jpeg", width="540"></p>
 <p align="center">Fig 1.6 pooling on a 4x4 input</p>
 
 - POOL: Image processing is a very computationally intensive process. To allow our algorithm to run at a decent speed while not compromising accuracy too heavily, we do a form of reduction on the image size in a technique called pooling. The image above shows how it is done. From each 2x2 square, we find the pixel with the largest value, retain it and throw away all the unused pixels we also do this for each depth layer (recall on the input image, it would be each color layer). Doing this transformation would essentially reduce the dimensions of the original image by half on height and another half on weight. Another reason why we wish to do this is to converge features of close proximity together such that more complex features can develop sooner.
+
+> The pooling technique we describe here is called max-pooling because we are only taking the max of every 2x2 squares. There are also other pooling methods such as min pooling and mean pooling. But this is by far the most popular method of pooling. Pooling can also be of larger dimensions like 3x3 or 4x4 although it is unrecommended as image sizes will reduce too fast.
 
 The act of repeating the process of CONV RELU POOL would simulate the process of reinforcing the complexity of the features gathered from the original image.
 
@@ -243,6 +251,7 @@ You will need the following software installed on your device of choice:
 - Numpy (for matrix manipulations and linear algebra)
 - pathlib
 - Matplotlib (optional)
+- Pandas (optional)
 
 Do also make sure that the dependencies you installed are suitable for the version of python you are working on.
 
@@ -383,11 +392,111 @@ print(y_train[:5])
 As you can see, we basically transformed y_train into a binary code of is or is not. ```img1``` which is labelled as a frog has an original label value of 6. From the single value of 6 it has transformed into an array of 10 digits, 0s everywhere except for the 6th place which has a value of 1. It just means that it is not a airplane, not a automobile ... but is a frog.
 
 ### Model building
-Now is time to define the model. before we declare the model, lets set out a clearly defined structure for our model before actually coding things out. We shall refer to the terminologies as defined in the [explanation of CNNs](#back-to-the-model)
+Now is time to define the model. before we declare the model, lets set out a clearly defined structure for our model before actually coding things out. We shall refer to the terminologies as defined in the [explanation of CNNs](#back-to-the-model).
 
 #### Layer number
-1. Convolution 3x3
+1. CONV1 3x3
 2. RELU
+3. CONV2 3x3
+4. RELU
+5. POOL1 2x2
+6. CONV3 3x3
+7. RELU
+8. CONV4 3x3
+9. RELU
+10. POOL2 2x2
+11. FC1 256
+12. FC2 10 (as there as 10 classes)
+
+Now that that's out of the way, here is how you define all this in code.
+
+```python
+model = Sequential() # our defined model functions in some sort of sequence, we use the Sequential class to initialize our model before adding the layers
+
+# Conv1 32 32 (3) => 30 30 (32)
+model.add(Conv2D(32, (3, 3), input_shape=X_shape[1:])) # in layer 1 we need to specify input shape this is not needed in subsequent layers
+model.add(Activation('relu'))
+# Conv2 30 30 (32) => 28 28 (32)
+model.add(Conv2D(32, (3, 3)))
+model.add(Activation('relu'))
+# Pool1 28 28 (32) => 14 14 (32)
+model.add(MaxPooling2D(pool_size=(2, 2))) # this CONV CONV POOL structure is popularized in during ImageNet 2014
+model.add(Dropout(0.25)) # we also apply this thing called dropout it io prevent overfitting
+
+# Conv3 14 14 (32) => 12 12 (64)
+model.add(Conv2D(64, (3, 3)))
+model.add(Activation('relu'))
+# Conv4 12 12 (64) => 6 6 (64)
+model.add(Conv2D(64, (3, 3)))
+model.add(Activation('relu'))
+# Pool2 6 6 (64) => 3 3 (64)
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+# FC layers 3 3 (64) => 576
+model.add(Flatten()) # to turn input into a 1 dimensional array
+# Dense1 576 => 256
+model.add(Dense(256))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+# Dense2 256 => 10
+model.add(Dense(num_classes))
+model.add(Activation('softmax')) # the softmax layer will scale all values down to between 0 and 1 which represents probability index
+```
+
+> The dropout layers works like this, choose a percentage of parameters randomly and discard them. Sounds counter intuitive but it works in ensuring that no parameter becomes overbearing on the entire model. Also it is a computationally cheap method to reduce overfitting. Do note that dropout layers do not activate during actual testing.
+
+Then you also have to define your parameter optimization strategy.
+
+```python
+optimizer = keras.optimizers.Adam() # Adam is one of many gradient descent formulas and one of the most popular
+```
+
+> There are also other really good optimizers like RMSprop but for most cases Adam works well enough on it's own. You can attempt to change the learning rate and decay rate. But make sure you know how to conduct gradient descent before actually doing so!
+
+Finally compile the model, simple as that.
+
+```python
+model.compile(loss='categorical_crossentropy',
+              optimizer=optimizer,
+              metrics=['accuracy'])
+```
+
+> Accuracy of class prediction model is how you are going to determine if the model is good or not so we use these loss and metrics. For more information visit (TO BE ADDED)
+
+### Model training
+Using the dataset we can calculate the set of suitable parameters, the process of finding those parameters is called training. Training of model cannot be simpler.
+
+```python
+nb_epoch = 200 # number of iterations to train on
+batch_size = 128 # process entire image set by chunks of 128
+
+model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_test, y_test)) # be wawrned that the entire model can take over 4 hours to train if you are not using GPU
+```
+
+> A batch size of 128 means to perform an iteration of gradient descent once on every 128 images. Gradient descent (or gradient update) is the most computationally intensive process in training CNNs but despite this it still makes sense to make more iterations of it. 128 is just about the right balance between training duration and frequency of gradient updates.
+
+You can save and load models using these commands,
+
+```python
+# to save model architecture
+outfile = open('./models/convnet_model.json', 'w') # of course you can specify your own file locations
+json.dump(model.to_json(), outfile)
+outfile.close()
+
+# to save model weights
+model.save_weights('./models/convnet_weights.h5')
+
+# to load model architecture
+infile = open('./models/convnet_model.json')
+model = keras.models.model_from_json(json.load(infile))
+infile.close()
+
+# to load model weights
+model.load_weights('./models/convnet_weights.h5')
+```
+
+Do note that in the ```basic_model.py``` script, the model weights are saved after each iteration. This way you will be able to continue training your model from where you left off, in case your python restarts itself half way through training.
 
 ## Visualizing your CNN
 - activation based
