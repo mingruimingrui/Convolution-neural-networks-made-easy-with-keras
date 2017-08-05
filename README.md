@@ -23,12 +23,13 @@ Though not necessary, some recommended prerequisites to this guide are:
 The goal of this article is to allow anyone with coding abilities to create their own starter deep learning model.
 
 ## Contents
-1. [Convolution neural networks, how it functions](#convolution-neural-networks-how-it-functions)
+1. [Convolution neural networks, how it functions](#convolution-neural-networks)
+  - [CNNs explained](#cnns-explained)
 2. [Building your first model](#building-your-first-model)
 3. [Visualizing your CNN](#visualizing-your-cnn)
 4. [Improving your model](#improving-your-model)
 
-## Convolution neural networks, how it functions
+## Convolution neural networks
 
 Image recognition used to be done using much simpler methods such as linear regression and comparison of similarities. The results were obviously not very good, even the simple task of recognizing hand-written alphabets proved difficult. Convolution neural networks (CNNs) are supposed to be a step up from what we traditionally do by offering a computationally cheap method of effectively simulating the neural activities of a human brain when it perceives images.
 
@@ -74,10 +75,10 @@ Make sure that you have understood all that were covered previously because the 
 One filter would only be capable of finding a single simplified feature on the original image. Multiple filters can be applied to identify multiple features. Lets say on the original image, a total of 32 filters are applied on the input 32x32x3 image, and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image. A step by step explanation of how to do this is as follows,
 
 1. generate a set of 32 filters of size 3x3x3 each
-<!-- 2. take just a single filter and apply filter onto every single 3x3 chunk of the input image receive a 30x30x1 'image' in return. -->
-2. place the 30x30x1 'image' aside and move onto the next filter
-3. apply 2nd filter to input image and receive another 30x30x1 'image', stack this 'image' on top of the other 30x30x1 'image' to get a 30x30x2 'image'
-4. repeat until all 32 filters are used.
+2. take just a single filter and apply filter onto every single 3x3 chunk of the input image receive a 30x30x1 'image' in return.
+3. place the 30x30x1 'image' aside and move onto the next filter
+4. apply 2nd filter to input image and receive another 30x30x1 'image', stack this 'image' on top of the other 30x30x1 'image' to get a 30x30x2 'image'
+5. repeat until all 32 filters are used.
 
 The entire process of transforming an input from a 32x32x3 form to a 30x30x32 form is known as a single convolution layer. An entire CNN model is usually made up of multiple convolution layers and a classifier layer. Here is an example of how a typical CNN would look like.
 
@@ -232,11 +233,6 @@ This section is going to be mainly for python coders since the library we will b
 By now you should have understood that CNN is a model made out of individual layers -->
 
 ## Building your first model
-- dataset
-- preprocessing
-- model Building
-- training
-
 This section will mainly be for python coders since the library that will be used, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
 
 To run the model covered in this section, simple do the following,
