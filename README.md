@@ -243,7 +243,7 @@ By now you should have understood that CNN is a model made out of individual lay
 * [Model building](#model-building)
 * [Model training](#model-training)
 
-This section will mainly be for python coders since the library that will be used, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
+Having Python experience will help greatly in this section. The library that will be used, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
 
 To run the model covered in this section, simple do the following,
 
@@ -419,15 +419,16 @@ Now that that's out of the way, here is how you define all this in code.
 ```python
 model = Sequential() # our defined model functions in some sort of sequence, we use the Sequential class to initialize our model before adding the layers
 
+# Here's how you add layers to your model
 # Conv1 32 32 (3) => 30 30 (32)
-model.add(Conv2D(32, (3, 3), input_shape=X_shape[1:])) # in layer 1 we need to specify input shape this is not needed in subsequent layers
+model.add(Conv2D(32, (3, 3), input_shape=X_shape[1:])) # in layer 1 you need to specify input shape this is not needed in subsequent layers
 model.add(Activation('relu'))
 # Conv2 30 30 (32) => 28 28 (32)
 model.add(Conv2D(32, (3, 3)))
 model.add(Activation('relu'))
 # Pool1 28 28 (32) => 14 14 (32)
-model.add(MaxPooling2D(pool_size=(2, 2))) # this CONV CONV POOL structure is popularized in during ImageNet 2014
-model.add(Dropout(0.25)) # we also apply this thing called dropout it io prevent overfitting
+model.add(MaxPooling2D(pool_size=(2, 2))) # the CONV CONV POOL structure is popularized in during ImageNet 2014
+model.add(Dropout(0.25)) # this thing called dropout is used to prevent overfitting
 
 # Conv3 14 14 (32) => 12 12 (64)
 model.add(Conv2D(64, (3, 3)))

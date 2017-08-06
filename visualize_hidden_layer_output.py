@@ -12,7 +12,7 @@ weight_path = './models/stashed/convnet_weights.h5'
 dtype_mult = 255
 num_classes = 10
 X_shape = (-1,32,32,3)
-layer_depths = ['conv2d_1','conv2d_2','conv2d_3','conv2d_4','conv2d_5','conv2d_6']
+layer_depths = ['conv2d_1','conv2d_2','conv2d_3','conv2d_4']
 
 labels = {
     0: 'airplane',
@@ -54,6 +54,12 @@ def load_model():
 
     return model
 
+def remove_till_layer(model, layer_name):
+    while model.layers[len(model.layers)-1].name != layer_name:
+        model.pop()
+
+    return model
+
 def get_random_img(X, y):
     i = np.random.randint(0, len(X))
     img = X[i].reshape(X_shape)
@@ -72,42 +78,52 @@ def get_random_correct_img(X, y, model):
 
     return img, label_id
 
-def pixel_contribution(img, label_id, i, j, model, certainty):
-    img.squeeze()[i:i+5,j:j+5] = np.random.rand(5,5,X_shape[3])
-    pred = model.predict(img)
-    contribution = certainty - pred.squeeze()[label_id]
-
-    return contribution
-
-def visualize(X, y, model, n_imgs=3):
-    sys.stdout.write('Regions with higher importance for model accuracy are shaded in red, less important regions are shaded in yellow\n')
+def generate_conv_layer_models():
+    sys.stdout.write('Generating layer models\n\n')
     sys.stdout.flush()
+    conv_models = []
 
-    k=0
-    while k < n_imgs:
-        img, label_id = get_random_correct_img(X, y, model)
-        pixel_contribution_img = np.zeros((X_shape[1:3]))
+    for layer_name in layer_depths:
+        conv_models.append(remove_till_layer(load_model(), layer_name))
 
-        pred = model.predict(img)
-        certainty = pred.squeeze()[label_id]
+    return conv_models
 
-        for i in range(X_shape[1]-4):
-            for j in range(X_shape[2]-4):
-                pixel_contribution_img[i+2,j+2] = pixel_contribution(
-                    img.copy(), label_id,
-                    i, j, model, certainty)
+def plot_hidden_layers(model, img, title=None):
+    to_visual = model.predict(img)
+    to_visual = to_visual.reshape(to_visual.shape[1:])
 
-        if pixel_contribution_img.max() > 0.25:
-            _ = plt.imshow(img.squeeze(), alpha=0.9)
-            _ = plt.imshow(pixel_contribution_img, cmap='YlOrRd', alpha=0.3)
-            _ = plt.title(labels[label_id])
-            _ = plt.show()
-            k += 1
+    _ = plt.figure()
+    if title:
+        _ = plt.suptitle(title)
+    sub_plot_height = math.ceil(np.sqrt(to_visual.shape[2]))
+    for i in range(to_visual.shape[2]):
+        ax = plt.subplot(sub_plot_height, sub_plot_height, i+1)
+        _ = plt.axis('off')
+        _ = ax.set_xticklabels([])
+        _ = ax.set_yticklabels([])
+        _ = ax.set_aspect('equal')
+        _ = plt.imshow(to_visual[:, :, i], cmap='inferno')
+
+def gen_models_and_visualize(X, y, n_imgs=3):
+    full_model = load_model()
+    conv_models = generate_conv_layer_models()
+
+    for i in range(n_imgs):
+        img, label_id = get_random_correct_img(X, y, full_model)
+
+        _ = plt.imshow(img.reshape(img.shape[1:]))
+        _ = plt.title(labels[label_id])
+
+        index = 0
+        for model in conv_models:
+            index += 1
+            plot_hidden_layers(model, img, 'conv layer {}'.format(index))
+
+        plt.show()
 
 def main():
     _, _, X, y = get_dataset()
-    model = load_model()
-    visualize(X, y, model, n_imgs=3)
+    gen_models_and_visualize(X, y)
 
 if __name__ == "__main__":
     # execute only if run as a script
