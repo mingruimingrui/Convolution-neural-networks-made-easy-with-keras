@@ -486,7 +486,7 @@ Do note that in the ```basic_model.py``` script, the model weights are saved aft
 ## Visualizing your CNN
 An important skill to have is to be able to interpret models. Here we will cover 4 of such methods. Do note that I have used a deeper model (which requires longer training time) in the codes below as they generally give better visualization. You can load the model I used from ```./models/stashed/``` but it would be completely fine to use the model trained from the previous section.
 
-The purpose of this section is focused around self-learning. Each section is going to be relatively unguided, only a basic intuition of what needs to be done is given the reason behind this is so that you can get right down to coding and researching the ways of implementation. If that isn't your cup of tea, then you can always just read through this and look at some of the pretty images I've plot out and run the codes I've done, I'll include the codes and how to run them below.
+These last few sections are left intentionally short. They are going to be relatively unguided, only a basic intuition of what needs to be done is given. The reason behind this is so that you can get right down to coding and researching the ways of implementation. If that isn't your cup of tea, then you can always just read through this and look at some of the pretty images I've plot out and run the codes I've done, I'll include the codes and how to run them below.
 
 ### Result based
 
@@ -616,9 +616,7 @@ Sparse representations are effective for storing patterns and maximizing the ind
 ### Transfer Learning
 Huge CNNs and large input images can take weeks on end to train. Luckily many world famous CNNs such as Google's Inception V3 and Microsoft's Resnet from the ImageNet competition, can be downloaded online and you can make use of them to generate your own models using some relatively computationally cheap methods. The idea is that the convolution layers have the purpose of sorting out the advanced features from the input images and that the fully connected layers have the job of making use of these advanced features to correctly predict the appropriate label for images. You can remove the fully connected layers and convert the images in your dataset into it's core features. You can then do classification through your own fully connected layers on these collected core features. This works because generally image features are pretty invariant. If a model is capable of detecting rough surfaces in one dataset, then it should also be capable of doing the same thing in another.
 
-Now that you have learnt about the various ways of improving your model, why not take a moment to make your own improvements to the basic model. This section is left intentionally short as now is a great opportunity for you to begin reading other people's publications and researching to understand said publications. It is a tedious process but the most impactful ways to learn is not easy.
-
-In ```improved_model.py``` I have introduced of 2 more layers of convolution as well as image augmentation to reach a accuracy of about 85% in 50 iterations. Try your best to beat this benchmark.
+Now that you have learnt about the various ways of improving your model, why not take a moment to make your own improvements to the basic model. In ```improved_model.py``` I have introduced of 2 more layers of convolution as well as image augmentation to reach a accuracy of about 85% in 50 iterations. Try your best to beat this benchmark.
 
 ## Foreword
 This ends the article. If you have read everything up till this point, I thank you from the bottom of my heart and wish that you have learnt something new. I hope that my explanation was sufficient but if there are any points to improve on or important points that I have left out, please email me at mingruimingrui@hotmail.com.
