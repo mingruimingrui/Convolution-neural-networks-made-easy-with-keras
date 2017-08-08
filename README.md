@@ -626,10 +626,9 @@ This ends the article. If you have read everything up till this point, I thank y
 <div class='foreword'>
   <img src="/imgs/me.jpeg", width="240">
   <p>I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph  </p>
+  <style type="text/css">
+  .foreword {
+    display: flex;
+  }
+  </style>
 </div>
-
-<style type="text/css">
-.foreword {
-  display: flex;
-}
-</style>
