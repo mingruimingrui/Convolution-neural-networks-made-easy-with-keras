@@ -287,7 +287,7 @@ plt.imshow(img1)
 plt.show()
 ```
 
-<p align="center"><img src="/imgs/frog.jpg", width="320"></p>
+<p align="center"><img src="/imgs/frog.jpg", width="240"></p>
 <p align="center">Fig 2.0 the image of the frog can be seen plotted out</p>
 
 y data is also stored in a matrix,
@@ -480,18 +480,29 @@ model.load_weights('./models/convnet_weights.h5')
 Do note that in the ```basic_model.py``` script, the model weights are saved after each iteration. This way you will be able to continue training your model from where you left off even if you restart your Python. After training you should be able to achieve an accuracy of about 80%.
 
 ## Visualizing your CNN
-An important skill to have is to be able to interpret results. Here we will cover 3 of such methods. Do note that I have used a deeper model (which requires longer training time) in the codes below as they generally give better visual results. You can load the model I used from ```./models/stashed/``` but it would be completely fine to use the model trained from the previous section.
+An important skill to have is to be able to interpret models. Here we will cover 4 of such methods. Do note that I have used a deeper model (which requires longer training time) in the codes below as they generally give better visualization. You can load the model I used from ```./models/stashed/``` but it would be completely fine to use the model trained from the previous section.
 
 ### Result based
-It is not difficult to imagine how to visualize results based on how well it performs but here are a list of things you can do,
+It is not difficult to imagine how to visualize results based on how well a model performs but here are a list of things you can do,
 
-1. calculate model accuracy
-2. plotting out random images from the test set and printing the prediction made by the model
-4. plotting out wrongly predicted images
-3. plotting out a breakdown of wrongly predicted images
+- calculate model accuracy
+- plotting out random images from the test set and printing the prediction made by the model
+- plotting out wrongly predicted images
+- plotting out a breakdown of wrongly predicted images
 
 ### Pixel-importance based
-You can also visualize which regions the model believes are important in making an accurate prediction by
+You can also visualize which regions the model believes are important in making an accurate prediction. One way to do this is described in the steps below,
+
+1. start with a correctly predicted image (it is important that it is correctly predicted since we know that the algorithm is probably capable of capturing it's key features)
+2. remove a pixel or a section from the original image (I did by sections in ```visualize_pixel_importance.py```)
+3. make predictions on the new image and see how much the removed aera contributed to making the correct prediction
+4. plot out a heat map of how much each area contributes to making the prediction correct
+
+<p align="center"><img src="/imgs/importance_1.jpeg", width="240"></p>
+<p align="center">Fig 3.0 image of a dog, important areas shaded in red</p>
+
+Depending on which pictures you used and the color scheme you used, you might end up with something like this. As we can see,
+
 
 - activation based
 - weight based
