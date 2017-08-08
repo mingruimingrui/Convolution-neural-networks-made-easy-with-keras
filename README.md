@@ -29,10 +29,6 @@ The goal of this article is to allow anyone with coding abilities to create thei
 4. [Improving your model](#improving-your-model)
 
 ## Convolution neural networks
-
-* [CNNs explained](#cnns-explained)
-* [Where filter weights come from](#where-filter-weights-come-from)
-
 Image recognition used to be done using much simpler methods such as linear regression and comparison of similarities. The results were obviously not very good, even the simple task of recognizing hand-written alphabets proved difficult. Convolution neural networks (CNNs) are supposed to be a step up from what we traditionally do by offering a computationally cheap method of effectively simulating the neural activities of a human brain when it perceives images.
 
 ### CNNs explained
@@ -74,13 +70,7 @@ Make sure that you have understood all that were covered previously because the 
 
 #### Back to the model
 
-One filter would only be capable of finding a single simplified feature on the original image. Multiple filters can be applied to identify multiple features. Lets say on the original image, a total of 32 filters are applied on the input 32x32x3 image, and so then the end result will be a 30x30x32 'image'. It is no longer so much of an image but rather a collection of features extracted from the original image. A step by step explanation of how to do this is as follows,
-
-1. generate a set of 32 filters of size 3x3x3 each
-2. take just a single filter and apply filter onto every single 3x3 chunk of the input image receive a 30x30x1 'image' in return.
-3. place the 30x30x1 'image' aside and move onto the next filter
-4. apply 2nd filter to input image and receive another 30x30x1 'image', stack this 'image' on top of the other 30x30x1 'image' to get a 30x30x2 'image'
-5. repeat until all 32 filters are used.
+One filter would only be capable of finding a single simplified feature on the original image. Multiple filters can be applied to identify multiple features. Lets say on the original image, a total of 32 filters are applied on the input 32x32x3 image. One filter applied onto the image will result in a 30x30x1 output. So to apply 32 unique filters, you merely stack the outputs on top of one another to result in a 30x30x32 output.
 
 The entire process of transforming an input from a 32x32x3 form to a 30x30x32 form is known as a single convolution layer. An entire CNN model is usually made up of multiple convolution layers and a classifier layer. Here is an example of how a typical CNN would look like.
 
@@ -91,7 +81,7 @@ The model would take an input from the left (here the image of a car). And the d
 
 - CONV: In the model in the picture, the first layer is a CONV layer. It is nothing new as CONV is just short form for convolution layer.
 
-> There are of course convolution layers of different sizes and not just 3x3. Some models uses 7x7 and even 11x11 filters but larger filters also mean more parameters which means longer training time. Filters are also usually has odd lengths and are squares. This is so as to have some sort of center to take reference from. There is also another concept called strides. In the examples above we use strides of size 1. Stride 2 would mean starting from the top left most 3x3 section of the imag, you move 2 pixels to the right before you apply your filter again, the same when you move downwards.
+> There are of course convolution layers of different sizes and not just 3x3. Some models uses 7x7 and even 11x11 filters but larger filters also mean more parameters which means longer training time. Filters are also usually has odd lengths and are squares. This is so as to have some sort of center to take reference from. There is also another concept called strides. In the examples above we use strides of size 1. Stride 2 would mean starting from the top left most 3x3 section of the image, you move 2 pixels to the right before you apply your filter again, the same when you move downwards.
 
 - RELU: The RELU layer (short for rectifier layer) is basically a transformation of all negative outputs of the previous layer into 0. As negative numbers would also contribute to the output of the next layer, 0 has a significance in the sense that it will not affect the results of the next layer. Looking back at the high-level definition of how a convolution works, negative numbers should mean the absence of a feature. 0 would fit that idea more concisely and that is the purpose of this layer. We will not change the values of the positive numbers as the magnitude of the positive number can help identify how closely the image represents a feature. The RELU layer will not transform the shape of it's input. If the input is of shape 30x30x32, the output would still be 30x30x32, except all the negatives are now 0s instead.
 
@@ -104,7 +94,7 @@ The model would take an input from the left (here the image of a car). And the d
 
 > The pooling technique we describe here is called max-pooling because we are only taking the max of every 2x2 squares. There are also other pooling methods such as min pooling and mean pooling. But this is by far the most popular method of pooling. Pooling can also be of larger dimensions like 3x3 or 4x4 although it is unrecommended as image sizes will reduce too fast.
 
-The act of repeating the process of CONV RELU POOL would simulate the process of reinforcing the complexity of the features gathered from the original image.
+The act of repeating the process of CONV RELU POOL would simulate the process of identifying more complex features from the original image.
 
 - FC: After retrieving all of the advanced features from each image, we combine them together to classify the image to it's proper label. We do so in the fully connected layer.
 
@@ -113,7 +103,7 @@ The act of repeating the process of CONV RELU POOL would simulate the process of
 
 The fully connected layer, will take in all of the advanced features produced by the final convolution layer and output the probability for each label. Remember that the purpose of the convolution layers are to output the presence of advanced features such as eyes, mouth, or wings. By taking note of the presence of such features, the fully connected layer will do the last bit of detective work to determine the most suitable label to apply to each image. Mathematically, it works in the same way as filters do except this time, there's no 3x3 portions. Each 'filter' in this case will be the same size as the output layer from the final layer of convolution. There can however be multiple fully-connected-layers but only just as many as the number of label classes you have, the intuition being that you can calculate the confidence level of each individual class separately.
 
-Do keep in mind, this is just a very basic understanding of what the fully connected layer seeks to accomplish. In actuality this layer can be much more complex but first, a much long awaited question should be answered.
+Do keep in mind, this is just a very basic understanding of what the fully connected layer seeks to accomplish. In actuality this layer can be much more complex but first, a long awaited question should first be answered.
 
 ### Where filter weights come from
 
@@ -226,36 +216,21 @@ The basis of computer vision and CNNs were laid down in the early 1950s by Hubel
 
 <p align="center"><img src="/imgs/hubel-wiesel-experiment.jpg", width="360"></p> -->
 
-<!-- ## Keras, deep learning simplified
-- Sequential model
-- Layer class
-- optimizer
-
-This section is going to be mainly for python coders since the library we will be using, Keras, operates supports only this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall go through a few key classes within the library before moving onto actually building a model.
-
-### Sequential Models
-By now you should have understood that CNN is a model made out of individual layers -->
-
 ## Building your first model
+Having Python experience will help greatly in this section and general coding knowledge is a must. The library that will be used, Keras, only supports this language. Keras is built using some other very popular deep learning libraries such as TensorFlow and CNTK as a backend. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. This section will have less explanation and more examples, coding's more of a 'go figure it out yourself' kind of thing. I have coded out the model in the file ```basic_model.py```. You can run it from there but where's the fun in that?
 
-* [Dataset](#dataset)
-* [Preprocessing](#preprocessing)
-* [Model building](#model-building)
-* [Model training](#model-training)
+To run the model covered in this section, simply do the following,
 
-Having Python experience will help greatly in this section. The library that will be used, Keras, only supports this language. Keras is built on top of some other very popular deep learning libraries such as TensorFlow. It acts as a wrapper to simplify the process of defining models and executing then. We shall get in more details later. I have also coded out the model in the file ```basic_model.py```. You can actually run all the codes in there without coding anything yourself but you will still need to fulfill all the dependencies listed below.
-
-To run the model covered in this section, simple do the following,
-
-1. Open up your console at whatever location you like and type ```git clone https://github.com/mingruimingrui/Convolution-neural-networks-made-easy-with-keras.git```
+1. Open up your console at the location you like and type ```git clone https://github.com/mingruimingrui/Convolution-neural-networks-made-easy-with-keras.git```
 2. ```cd Convolution-neural-networks-made-easy-with-keras```
 3. ```python basic_model.py```
 
 #### Dependencies
-You will need the following software installed on your device of choice:
+You will  need the following software installed on your device of choice:
 - Python 2/3 (I'm using Python 3.5)
 - Numpy (for matrix manipulations and linear algebra)
-- pathlib
+- Keras (with your backend of choice, I'm using TensorFlow)
+- pathlib (optional)
 - Matplotlib (optional)
 - Pandas (optional)
 
@@ -287,7 +262,6 @@ print(X_train.shape) # method to identify shape(size) of numpy.ndarray also know
 
 X data is stored in a format known as a matrix in python, the Numpy library is a library for creating and manipulating matrix objects and a ```numpy.ndarray``` is the default matrix class. A matrix is relatively easy to understand. In the context of the example above, ```X_train``` can be viewed as a multi dimensional array. We know that the dataset is a collection of 32x32x3 images so ```X_train``` can be interpreted in the following format ```(image_index, height_index, width_index, rgb_index)```. In other words, there are 50,000 images in ```X_train```.
 
-
 We can easily access individual images this way,
 
 ```python
@@ -295,7 +269,11 @@ img1 = X_train[0, :, :, :] # : operator just means select all
 print(img1.shape)
 >>> (32, 32, 3)
 
-img_exp = X_train[0:30, :, :, :] # selection of multiple images can be easily done this way
+img1_again = X_train[0] # another way of selecting images
+print(img1_again.shape)
+>>> (32, 32, 3)
+
+img_exp = X_train[0:30] # selection of multiple images can be easily done this way
 print(img_exp.shape)
 >>> (30, 32, 32, 3)
 ```
@@ -306,10 +284,6 @@ We can also plot out the images using Matplotlib,
 from matplotlib.pyplot import plt
 
 plt.imshow(img1)
-plt.show()
-
-img1_again = X_train[0] # another way of selecting images
-plt.imshow(img1_again)
 plt.show()
 ```
 
@@ -363,7 +337,7 @@ print(y_train.shape)
 Perfect lets move on.
 
 ### Preprocessing
-Preprocessing is important step in building machine learning algorithms. There are things that you can do on both your X and y. Here we will explore 2 preprocessing techniques, mean-normalization and binary encoding.
+Preprocessing is an important step in building machine learning algorithms. There are things that you can do on both your X and y. Here we will explore 2 preprocessing techniques, mean-normalization and binary encoding.
 
 #### Mean-normalization
 Image pixel values are usually of the datatype ```uint8``` which means an integer between the range of 0 to 255. If we make use of such large numbers in our models, there can be possibility of overflow (what happens when numbers get too big and the machine fails to compute correctly). To reduce possibility of overflow, we scale our original values down to a decimal between 0 and 1. Doing so is easy, we just have to divide every term by 255, the highest possible value.
@@ -503,9 +477,22 @@ infile.close()
 model.load_weights('./models/convnet_weights.h5')
 ```
 
-Do note that in the ```basic_model.py``` script, the model weights are saved after each iteration. This way you will be able to continue training your model from where you left off, in case your python restarts itself half way through training.
+Do note that in the ```basic_model.py``` script, the model weights are saved after each iteration. This way you will be able to continue training your model from where you left off even if you restart your Python. After training you should be able to achieve an accuracy of about 80%.
 
 ## Visualizing your CNN
+An important skill to have is to be able to interpret results. Here we will cover 3 of such methods. Do note that I have used a deeper model (which requires longer training time) in the codes below as they generally give better visual results. You can load the model I used from ```./models/stashed/``` but it would be completely fine to use the model trained from the previous section.
+
+### Result based
+It is not difficult to imagine how to visualize results based on how well it performs but here are a list of things you can do,
+
+1. calculate model accuracy
+2. plotting out random images from the test set and printing the prediction made by the model
+4. plotting out wrongly predicted images
+3. plotting out a breakdown of wrongly predicted images
+
+### Pixel-importance based
+You can also visualize which regions the model believes are important in making an accurate prediction by
+
 - activation based
 - weight based
 - result based

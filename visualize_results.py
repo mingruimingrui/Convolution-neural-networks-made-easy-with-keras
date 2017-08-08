@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import keras
 from keras.datasets import cifar10
 
-model_path = './models/convnet_model.json'
-weight_path = './models/convnet_weights.h5'
+model_path = './models/stashed/convnet_model.json'
+weight_path = './models/stashed/convnet_weights.h5'
 dtype_mult = 255
 num_classes = 10
 X_shape = (-1,32,32,3)
@@ -54,6 +54,20 @@ def load_model():
 
     return model
 
+def print_accuracy(model, X_train, y_train, X_test=None, y_test=None):
+    print('Calculating model accuracy')
+
+    pred_train = model.predict(X_train)
+    acc_train = np.sum(pred_train.argmax(axis=1) == y_train.argmax(axis=1)) / len(y_train)
+    print('Training acc: {}'.format(acc_train))
+
+    if (type(X_test) != type(None)) & (type(y_test) != type(None)):
+        pred_test = model.predict(X_test)
+        acc_test = np.sum(pred_test.argmax(axis=1) == y_test.argmax(axis=1)) / len(y_test)
+        print('Testing acc: {}\n'.format(acc_test))
+
+    sys.stdout.flush()
+
 def get_random_img(X, y):
     i = np.random.randint(0, len(X))
     img = X[i].reshape(X_shape)
@@ -68,11 +82,13 @@ def visualize_examples(X, y, model, n_imgs=3):
         pred = list(map(lambda x: [labels[x], pred[x]], labels))
         pred.sort(key=lambda x: x[1], reverse=True)
 
+        print('Top 3 likely predictions:')
         print(pred[:3])
+        print()
         sys.stdout.flush()
 
         _ = plt.imshow(img.squeeze())
-        _ = plt.title(label)
+        _ = plt.title('Actual label: {}'.format(label))
         _ = plt.show()
 
     sys.stdout.write('\n')
@@ -94,6 +110,7 @@ def print_error_breakdown(X, y, model):
 def main():
     X_train, y_train, X_test, y_test = get_dataset()
     model = load_model()
+    print_accuracy(model, X_train, y_train, X_test, y_test)
     visualize_examples(X_test, y_test, model, n_imgs=3)
     print('Training error breakdown')
     print_error_breakdown(X_train, y_train, model)
