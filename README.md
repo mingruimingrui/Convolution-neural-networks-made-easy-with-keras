@@ -291,7 +291,7 @@ plt.imshow(img1)
 plt.show()
 ```
 
-<p align="center"><img src="/imgs/frog.jpg", width="18  0"></p>
+<p align="center"><img src="/imgs/frog.jpg", width="180"></p>
 <p align="center">Fig 2.0 the image of the frog can be seen plotted out</p>
 
 y data is also stored in a matrix,
