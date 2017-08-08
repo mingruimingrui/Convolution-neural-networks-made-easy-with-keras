@@ -64,7 +64,7 @@ What we are trying to do here is to detect the presence of simple patterns such 
 
 In the image above, a filter is applied to find vertical and horizontal lines and as we can see, in each of the pictures on the left, only the places where vertical lines are present will show up in white and likewise horizontal lines for the picture on the right.
 
-Going by this idea we can think of filtering as a process of breaking down the original image into a list of presence of simplified structures. By knowing the presence of slanted lines and horizontal lines and other simple basic information, more interesting features such as eyes and nose and mouth then then be identified and if there is the presence of an eye and a mouth and a nose, then the classifier will have a pretty good certainty that the image at hand is probably a face. Basically that is what a CNN would do, by doing detective work on the abstract information that it is able to extract from the input image and through a somewhat logical thought process come to the deduction of the correct label to attach to a particular image.
+Going by this idea we can think of filtering as a process of breaking down the original image into a list of presence of simplified structures. By knowing the presence of slanted lines and horizontal lines and other simple basic information, more interesting features such as eyes and nose and mouth then then be identified and if there is the presence of an eye and a mouth and a nose, then the classifier will have a pretty good certainty that the image at hand is probably a face. Basically that is what a CNN would do, by doing detective work on the abstract information that it is able to extract from the input image and through a somewhat logical thought process come to the deduction of the correct label to attach to a particular image. It won't exactly look for eyes or nose, but it would attempt to do something similar in an abstract manner.
 
 Make sure that you have understood all that were covered previously because the next section is going to progress at a much faster rate. We are still not going to talk about how to calculate filters yet. First, let us finish up the mechanics of the CNN.
 
@@ -203,7 +203,7 @@ Recall that minimizing this average error will result in a more accurate model. 
 
 Those of you familiar with calculus should be able to recognize that solving this problem involves finding differential functions. But those who aren't don't have to worry too much as most deep learning libraries these days are capable of doing these math for you. Learning the math is tedious especially for people without prior mathematical knowledge however it is still useful and fundamental when building more complex algorithms and models. By the way, the full cost function (average error) would also contain a regularization term as well as some other sophistications depending on the problem at hand.
 
-One thing of note is that we do not specify the objectives for each filter. That is because the filters usually adjust themselves to identify complex features. This isn't exactly surprising from a statistical standpoint. Eyes, nose, and mouth are usually very good indicators in face identification. Models are considered good if they are able to identify complex features.
+One thing of note is that we do not specify the objectives for each filter. That is because the filters usually adjust themselves to identify complex features. This isn't exactly surprising from a statistical standpoint. Eyes, nose, and mouth are usually very good indicators in face identification. Models are considered good if they are able to identify abstractions of such complex features.
 
 If you intend to learn gradient descent from scratch, it might make sense to learn neural network basis while you're at it. There are some pretty good materials (some which are free) online. The most ones popular includes the [machine learning course on coursera](https://www.coursera.org/learn/machine-learning), [Learning From Data course by CalTech](https://www.edx.org/course/learning-data-introductory-machine-caltechx-cs1156x-0), and [many more](https://www.springboard.com/blog/machine-learning-online-courses/).
 
@@ -508,41 +508,61 @@ You can also visualize which regions the model believes are important in making 
 Depending on which pictures you used and the color scheme you used, you might end up with something like this. As you can see, important regions usually centered around the dogs ears, eyes and mouth. I apologies for the picture quality being like this the red parts are simply not coming out well. If anyone has any suggestion on making heat maps, please send me an email which can be found below!
 
 ### Activation based
-After training your model, you can also attempt to visualize exactly what each filter is attempting to do. One method is through the construction of an input image which would maximize the output of a filter. In essence what this would achieve is the recreation of the exact feature that the filter is attempting to find. Exactly how this is done is through gradient ascent (opposite of descent). A guide on how to do this along with some sample codes are available on [Keras's official blog](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html).
+After training your model, you can also attempt to visualize exactly what each filter is attempting to do. One method is through the construction of an input image which would maximize the output of a filter. In essence what this would achieve is the recreation of the feature that the filter gets most excited over (what the filter is attempting to find). Exactly how this is done is through gradient ascent (opposite of descent). Thankfully Keras can take care of the mathematics for us. A guide on how to do this along with some sample codes are available on [Keras's official blog](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html).
+
+Here I have plotted out some images which would maximize the activation for 4 filters in each odd numbered convolution layer (this is done so as to save space and maintain objectivity).
 
 <p align="center"><img src="/imgs/activation_1.jpeg", width="560"></p>
-<p align="center">Fig 3.1 activation of convolution layer 1, it is looking for color pallets</p>
+<p align="center">Fig 3.1 activation of convolution layer 1</p>
+
+Layer 1:
+- As we might expect, filters in layer 1 are looking for simple features. In this case, they are looking for unique colors.
 
 <p align="center"><img src="/imgs/activation_3.jpeg", width="560"></p>
 <p align="center">Fig 3.2 activation of convolution layer 3, more complex features are developing such as lines at different orientations</p>
 
+Layer 3:
+- Here is where things become more interesting. Filters above are attempting to detect lines of different tilt and colors.
+
 <p align="center"><img src="/imgs/activation_5.jpeg", width="560"></p>
 <p align="center">Fig 3.3 activation of convolution layer 5, filters can be seem attempting to find ball shapes</p>
 
-Here I have plotted out some images which would maximize the activation for 4 filters in each odd numbered convolution layer (this is done so as to save space and maintain objectivity). As we might expect, filters in layer 1 are looking for simple features. In this case, they are looking for unique colors. Layer 3 is where things become more interesting. Filters above are attempting to detect lines of different tilt and colors. Then in Layer 5, a filter can clearly be seen looking for red colored balls.
+Layer 5:
+- A filter can clearly be seen built for the purpose of finding red balls, however from this point on features are starting to become too abstract to fully understand.
+
+<p align="center"><img src="/imgs/activation_7.jpeg", width="560"></p>
+<p align="center">Fig 3.4 activation of fully connected layer 1</p>
+
+Layer 7:
+- It is unclear what exactly these filters are attempting to look for as the level of abstraction is too high.
+
 
 ### Partial-output based
 Another way to visualize what filters are attempting to do is by plotting out the partial output after each convolution layer. The intuition is that partial outputs are the indicators for the presence of certain features (recall [the high-level explanation](#The-high-level-explanation)). After identifying a suitable image, all you have to do is to run the image through the layers one at a time and plot out those partial outputs.
+
+Here we have an image of a truck, lets take a look at what each filter is attempting to detect.
 
 <p align="center"><img src="/imgs/output_1.jpeg", width="180"></p>
 <p align="center">Fig 3.4 original image of a truck</p>
 
 <p align="center"><img src="/imgs/output_2.jpeg", width="560"></p>
-<p align="center">Fig 3.5 partial output of convolution layer 1</p>
+<p align="center">Fig 3.5 partial output of convolution layer 2, high-levels of activation are colored in yellow</p>
+
+Layer 1:
+- We know from the previous visualization that this layer is attempting to locate colors. The filters that attempt to detect white are getting excited over the body of the truck while those which attempt to locate orange are excited over the head light.
 
 <p align="center"><img src="/imgs/output_4.jpeg", width="560"></p>
 <p align="center">Fig 3.6 partial output of convolution layer 3</p>
 
-Here we have an image of a truck, I have made some plots of what each 
+Layer 3:
+- Here filters are getting excited over more complex features. Some filters appear to be detecting wheels and others seem to be attempting to find doors and windows.
 
-
-- activation based
-- weight based
-- result based
-- external material
+Another thing to note is that partial outputs in convolution layer 3 is significantly smaller that those from convolution layer 1. This is due to the effects of pooling. Thus this method of visualization is suitable only for earlier layers as the deeper you go, the lower the resolution of the partial outputs.
 
 ## Improving your model
 Coming soon, I'm still tuning the model to get a right balance of scale and speed
+
 Update, removed sparse encoding as even a 64x64 image require too long to process on a home desktop level computer.
-Plans
+
+Plans:
 - focus more on img augmentation / alternative optimization / model structure changes / batch wised training
