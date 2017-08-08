@@ -624,7 +624,7 @@ In ```improved_model.py``` I have introduced of 2 more layers of convolution as 
 This ends the article. If you have read everything up till this point, I thank you from the bottom of my heart and wish that you have learnt something new. I hope that my explanation was sufficient but if there are any points to improve on or important points that I have left out, please email me at mingruimingrui@hotmail.com.
 
 <div>
-  <img src="/imgs/me.jpeg", width="240" align="left" />
+  <img src="/imgs/me2.jpeg", width="240" align="left" />
   <h3 align="center">Wang Ming Rui</h3>
   <p align="center">I am a 3rd year student at the National University of Singapore. I'm a strong believer in constant learning and knowledge sharing. My hobbies include mathematics, drinking coffee, and reading dank memes.</p>
 </div>
