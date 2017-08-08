@@ -81,7 +81,7 @@ The model would take an input from the left (here the image of a car). And the d
 
 - CONV: In the model in the picture, the first layer is a CONV layer. It is nothing new as CONV is just short form for convolution layer.
 
-> There are of course convolution layers of different sizes and not just 3x3. Some models uses 7x7 and even 11x11 filters but larger filters also mean more parameters which means longer training time. Filters are also usually has odd lengths and are squares. This is so as to have some sort of center to take reference from. There is also another concept called strides. In the examples above we use strides of size 1. Stride 2 would mean starting from the top left most 3x3 section of the image, you move 2 pixels to the right before you apply your filter again, the same when you move downwards.
+> There are of course convolution layers of different sizes and not just 3x3. Some models uses 7x7 and even 11x11 filters but larger filters also mean more parameters which means longer training time. Filters are also usually has odd lengths and are squares. This is so as to have some sort of center to take reference from. There is also another concept called strides. In the examples above we use strides of size 1. Stride 2 would mean starting from the top left most 3x3 section of the image, you move 2 pixels to the right before you apply your filter again, the same when you move downwards. Padding is another technique commonly used. Usually when filtering takes place, the original image would shrink. If you pad the original image with pixels of values of 0 around it's borders, you will effectively be able to maintain image size. ie 32x32 input 32x32 output (instead of 30x30). This is crucial if you wish to build deep learning models which contains more layers.
 
 - RELU: The RELU layer (short for rectifier layer) is basically a transformation of all negative outputs of the previous layer into 0. As negative numbers would also contribute to the output of the next layer, 0 has a significance in the sense that it will not affect the results of the next layer. Looking back at the high-level definition of how a convolution works, negative numbers should mean the absence of a feature. 0 would fit that idea more concisely and that is the purpose of this layer. We will not change the values of the positive numbers as the magnitude of the positive number can help identify how closely the image represents a feature. The RELU layer will not transform the shape of it's input. If the input is of shape 30x30x32, the output would still be 30x30x32, except all the negatives are now 0s instead.
 
@@ -486,7 +486,15 @@ Do note that in the ```basic_model.py``` script, the model weights are saved aft
 ## Visualizing your CNN
 An important skill to have is to be able to interpret models. Here we will cover 4 of such methods. Do note that I have used a deeper model (which requires longer training time) in the codes below as they generally give better visualization. You can load the model I used from ```./models/stashed/``` but it would be completely fine to use the model trained from the previous section.
 
+The purpose of this section is focused around self-learning. Each section is going to be relatively unguided, only a basic intuition of what needs to be done is given the reason behind this is so that you can get right down to coding and researching the ways of implementation. If that isn't your cup of tea, then you can always just read through this and look at some of the pretty images I've plot out and run the codes I've done, I'll include the codes and how to run them below.
+
 ### Result based
+
+On your console,
+```
+python visualize_results.py
+```
+
 It is not difficult to imagine how to visualize results based on how well a model performs but here are a list of things you can do,
 
 - calculate model accuracy
@@ -495,6 +503,12 @@ It is not difficult to imagine how to visualize results based on how well a mode
 - plotting out a breakdown of wrongly predicted images
 
 ### Pixel-importance based
+
+On your console,
+```
+python visualize_pixel_importance.py
+```
+
 You can also visualize which regions the model believes are important in making an accurate prediction. One way to do this is described in the steps below,
 
 1. start with a correctly predicted image (it is important that it is correctly predicted since we know that the algorithm is probably capable of capturing it's key features)
@@ -508,7 +522,15 @@ You can also visualize which regions the model believes are important in making 
 Depending on which pictures you used and the color scheme you used, you might end up with something like this. As you can see, important regions usually centered around the dogs ears, eyes and mouth. I apologies for the picture quality being like this the red parts are simply not coming out well. If anyone has any suggestion on making heat maps, please send me an email which can be found below!
 
 ### Activation based
+
+On your console,
+```
+python visualize_hidden_layer_activation.py
+```
+
 After training your model, you can also attempt to visualize exactly what each filter is attempting to do. One method is through the construction of an input image which would maximize the output of a filter. In essence what this would achieve is the recreation of the feature that the filter gets most excited over (what the filter is attempting to find). Exactly how this is done is through gradient ascent (opposite of descent). Thankfully Keras can take care of the mathematics for us. A guide on how to do this along with some sample codes are available on [Keras's official blog](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html).
+
+> Here you can also challenge yourself to learn gradient ascent and write your own algorithm to create these images
 
 Here I have plotted out some images which would maximize the activation for 4 filters in each odd numbered convolution layer (this is done so as to save space and maintain objectivity).
 
@@ -538,21 +560,27 @@ Layer 7:
 
 
 ### Partial-output based
+
+On your console,
+```
+python visualize_hidden_layer_output.py
+```
+
 Another way to visualize what filters are attempting to do is by plotting out the partial output after each convolution layer. The intuition is that partial outputs are the indicators for the presence of certain features (recall [the high-level explanation](#The-high-level-explanation)). After identifying a suitable image, all you have to do is to run the image through the layers one at a time and plot out those partial outputs.
 
 Here we have an image of a truck, lets take a look at what each filter is attempting to detect.
 
 <p align="center"><img src="/imgs/output_1.jpeg", width="180"></p>
-<p align="center">Fig 3.4 original image of a truck</p>
+<p align="center">Fig 3.5 original image of a truck</p>
 
 <p align="center"><img src="/imgs/output_2.jpeg", width="560"></p>
-<p align="center">Fig 3.5 partial output of convolution layer 2, high-levels of activation are colored in yellow</p>
+<p align="center">Fig 3.6 partial output of convolution layer 2, high-levels of activation are colored in yellow</p>
 
 Layer 1:
 - We know from the previous visualization that this layer is attempting to locate colors. The filters that attempt to detect white are getting excited over the body of the truck while those which attempt to locate orange are excited over the head light.
 
 <p align="center"><img src="/imgs/output_4.jpeg", width="560"></p>
-<p align="center">Fig 3.6 partial output of convolution layer 3</p>
+<p align="center">Fig 3.7 partial output of convolution layer 3</p>
 
 Layer 3:
 - Here filters are getting excited over more complex features. Some filters appear to be detecting wheels and others seem to be attempting to find doors and windows.
@@ -560,9 +588,41 @@ Layer 3:
 Another thing to note is that partial outputs in convolution layer 3 is significantly smaller that those from convolution layer 1. This is due to the effects of pooling. Thus this method of visualization is suitable only for earlier layers as the deeper you go, the lower the resolution of the partial outputs.
 
 ## Improving your model
-Coming soon, I'm still tuning the model to get a right balance of scale and speed
 
-Update, removed sparse encoding as even a 64x64 image require too long to process on a home desktop level computer.
+From the [basic model as defined earlier](#model-building) you would only be able to achieve a test accuracy of about 80%. Good models are capable of reaching as high as [95.5% accuracy](http://blog.kaggle.com/2015/01/02/cifar-10-competition-winners-interviews-with-dr-ben-graham-phil-culliton-zygmunt-zajac/). There are a few things that you can do to improve from your basic model.
 
-Plans:
-- focus more on img augmentation / alternative optimization / model structure changes / batch wised training
+### Learn from successful implementations of other CNNs
+There are billions of different ways to build a CNN and it is not possible to explore all of them. But a good way to get a general grasp of what is expected to work and what isn't is through learning from [past implementations of successful CNNs](https://adeshpande3.github.io/adeshpande3.github.io/The-9-Deep-Learning-Papers-You-Need-To-Know-About.html).
+
+Practices such as multi CONVS then POOL are so successful that they are now generally industry practice. Another general consensus that was derived from history is that increasing model depth would also improve model accuracy.
+
+### Collect more example images
+A CNN is only capable of generalizing from images it has seen before. By increasing the number of example images, the CNN would have more experience in classifying more diverse sets of image. Collection of new example images however can sometimes be difficult due to the unavailability of free datasets. At other times, datasets can be of poor quality with tons of wrongly labelled examples, rendering them less useful.
+
+### Use image augmentation
+The dataset that has been used in this article contains only 60,000 unique images. excluding testing data, that leaves us with only 50,000 images. However from these 50,000 images, you can 'make' more images.
+
+<p align="center"><img src="/imgs/cat.jpg", width="180"></p>
+<p align="center"><img src="/imgs/cat2.jpg", width="180"></p>
+<p align="center">Fig 4.0 an image of a cat, flipped on the vertical axis</p>
+
+The two images above are not the same to a machine as they comprise of different sets of pixel values. By doing transformations such as this, we are able to 'expand' the size of the original training set. Other popular methods to expand the training set is through adding white noise to the original picture and contorting the image by zooming and shrinking.
+
+### Apply sparse-encoding
+Sparse-encoding techniques such as [sparse-coding](http://ufldl.stanford.edu/wiki/index.php/Sparse_Coding) and [sparse PCA](https://en.wikipedia.org/wiki/Sparse_PCA) are recently discovered methods to boost model accuracy. In some sense, they are akin to Fourier transformations.
+
+Sparse representations are effective for storing patterns and maximizing the independence of features this would lead to more pronounced identification of complex image features. An implementation of how scarcity can help CNNs can be seen in [this paper](https://arxiv.org/abs/1409.6070).
+
+### Transfer Learning
+Huge CNNs and large input images can take weeks on end to train. Luckily many world famous CNNs such as Google's Inception V3 and Microsoft's Resnet from the ImageNet competition, can be downloaded online and you can make use of them to generate your own models using some relatively computationally cheap methods. The idea is that the convolution layers have the purpose of sorting out the advanced features from the input images and that the fully connected layers have the job of making use of these advanced features to correctly predict the appropriate label for images. You can remove the fully connected layers and convert the images in your dataset into it's core features. You can then do classification through your own fully connected layers on these collected core features. This works because generally image features are pretty invariant. If a model is capable of detecting rough surfaces in one dataset, then it should also be capable of doing the same thing in another.
+
+Now that you have learnt about the various ways of improving your model, why not take a moment to make your own improvements to the basic model. This section is left intentionally short as now is a great opportunity for you to begin reading other people's publications and researching to understand said publications. It is a tedious process but the most impactful ways to learn is not easy.
+
+In ```improved_model.py``` I have introduced of 2 more layers of convolution as well as image augmentation to reach a accuracy of about 85% in 50 iterations. Try your best to beat this benchmark.
+
+## Foreword
+This ends the article. If you have read everything up till this point, I thank you from the bottom of my heart and wish that you have learnt something new. I hope that my explanation was sufficient but if there are any points to improve on or important points that I have left out, please email me at mingruimingrui@hotmail.com.
+
+<div>
+TEMP
+</div>
