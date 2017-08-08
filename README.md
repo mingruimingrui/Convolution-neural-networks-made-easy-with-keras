@@ -626,5 +626,5 @@ This ends the article. If you have read everything up till this point, I thank y
 <div>
   <img src="/imgs/me.jpeg", width="240" align="left" />
   <h3 align="center">Wang Ming Rui</h3>
-  <p align="center">I am a 3rd year student at the National University of Singapore. I'm a strong believer in hard work and constant learning. My hobbies include mathematics, going on road trips, and reading dank memes.</p>
+  <p align="center">is a 3rd year student at the National University of Singapore. He's a strong believer in hard work and constant learning. Hobbies include mathematics, going on road trips, and reading dank memes.</p>
 </div>
