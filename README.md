@@ -623,6 +623,13 @@ In ```improved_model.py``` I have introduced of 2 more layers of convolution as 
 ## Foreword
 This ends the article. If you have read everything up till this point, I thank you from the bottom of my heart and wish that you have learnt something new. I hope that my explanation was sufficient but if there are any points to improve on or important points that I have left out, please email me at mingruimingrui@hotmail.com.
 
-<div>
-TEMP
+<div class='foreword'>
+  <img src="/imgs/me.jpeg", width="240">
+  <p>I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph I am a long paragraph  </p>
 </div>
+
+<style type="text/css">
+.foreword {
+  display: flex;
+}
+</style>
